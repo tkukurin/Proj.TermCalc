@@ -36,8 +36,4 @@ public class CalculatorEnvironment {
         this.outputStreamWriter.write(System.lineSeparator());
         this.outputStreamWriter.flush();
     }
-
-    public boolean isExitString(String input) {
-        return Objects.equals("exit", input.trim());
-    }
 }
