@@ -2,7 +2,6 @@ package com.toptal.environment;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class CalculatorEnvironment {

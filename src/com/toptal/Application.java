@@ -43,6 +43,8 @@ public class Application {
             return parser.parse(input);
         } catch(QueryParseException e) {
             return e.getLocalizedMessage();
+        } catch(Exception e) {
+            return "Oops... Something went wrong: " + e.getLocalizedMessage();
         }
     }
 
