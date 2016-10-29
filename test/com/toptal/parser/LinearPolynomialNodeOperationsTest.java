@@ -22,6 +22,21 @@ public class LinearPolynomialNodeOperationsTest {
     }
 
     @Test
+    public void shouldPerformSubtraction() throws Exception {
+        // given
+        LinearPolynomialNode first = new LinearPolynomialNode(null, 2.0);
+        LinearPolynomialNode second = new LinearPolynomialNode(1.0, 2.0);
+
+        // when
+        LinearPolynomialNodeOperation operation = new LinearPolynomialNodeOperation();
+        LinearPolynomialNode result = operation.subtract(first, second);
+
+        // then
+        assertEquals(Double.valueOf(-1.0), result.getFreeValue().get());
+        assertEquals(Double.valueOf(0.0), result.getBoundValue().get());
+    }
+
+    @Test
     public void shouldPerformMultiplicationWithBoundVariables() throws Exception {
         // given
         LinearPolynomialNode first = new LinearPolynomialNode(2.0, null);
