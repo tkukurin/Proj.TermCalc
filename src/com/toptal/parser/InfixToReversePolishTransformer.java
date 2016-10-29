@@ -1,5 +1,7 @@
 package com.toptal.parser;
 
+import com.toptal.parser.result.QueryParseResult;
+
 import java.util.Stack;
 
 public class InfixToReversePolishTransformer {

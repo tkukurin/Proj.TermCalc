@@ -40,11 +40,11 @@ public class Application {
 
     private String getResult(String input) {
         try {
-            return parser.parse(input);
+            return QueryParser.parse(input).toString();
         } catch(QueryParseException e) {
-            return e.getLocalizedMessage();
+            return "Malformed query: " + e.getLocalizedMessage();
         } catch(Exception e) {
-            return "Oops... Something went wrong: " + e.getLocalizedMessage();
+            return "Error evaluating: " + e.getLocalizedMessage();
         }
     }
 

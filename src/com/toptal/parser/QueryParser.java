@@ -1,49 +1,41 @@
 package com.toptal.parser;
 
-import java.util.function.BiFunction;
-
-import static com.toptal.parser.Operation.binaryOperatorStringToExecutor;
+import com.toptal.parser.result.QueryParseResult;
 
 public class QueryParser {
 
-    public String parse(String input) {
-        input = input.trim();
-        String returnValue = "";
+    private char[] input;
+    private int position;
 
-        for(String operator : binaryOperatorStringToExecutor.keySet()) {
-            String[] numbers = splitBy(input, operator);
-
-            if(numbers.length == 2) {
-                double result = performOperation(numbers[0], numbers[1], binaryOperatorStringToExecutor.get(operator));
-                returnValue = Double.toString(result);
-                break;
-            }
-        }
-
-
-        return returnValue;
+    private QueryParser(String input) {
+        this.position = 0;
+        this.input = input.toCharArray();
     }
 
-    private String[] splitBy(String input, String operator) {
-        int operatorIndex = input.indexOf(operator);
-
-        if(operatorIndex >= 0) {
-            return new String[] {
-                    input.substring(0, operatorIndex).trim(),
-                    input.substring(operatorIndex + 1).trim()
-            };
+    private QueryParseResult parse() {
+        while(Character.isWhitespace(input[position])) {
+            position++;
         }
 
-        return new String[] { input };
+        // or char starts with "." ?
+        if(Character.isDigit(input[position])) {
+            // push number.
+            parseNumeric();
+        }
+
+        if(input[position] == '(') {
+
+        }
+
+        return null;
     }
 
-    private double performOperation(String firstOperandString,
-                                    String secondOperandString,
-                                    BiFunction<Double, Double, Double> operation) {
-        double firstOperand = Double.parseDouble(firstOperandString);
-        double secondOperand = Double.parseDouble(secondOperandString);
+    private void parseNumeric() {
 
-        return operation.apply(firstOperand, secondOperand);
+    }
+
+    public static QueryParseResult parse(String input) {
+        return new QueryParser(input).parse();
     }
 
 }
