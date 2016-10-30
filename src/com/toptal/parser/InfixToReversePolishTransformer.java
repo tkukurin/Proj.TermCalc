@@ -32,14 +32,17 @@ public class InfixToReversePolishTransformer {
                 tokens.add(query.substring(i, endIndex));
                 i = endIndex - 1;
             } else if(operatorToPrecedenceMap.containsKey(s)) {
-                transferAllWithLowerPrecedenceToTokenList(tokens, operators, operatorToPrecedenceMap.get(s));
+                tokens.addAll(popOffAllWithLowerPrecedence(operators, operatorToPrecedenceMap.get(s)));
                 operators.push(s);
             } else if(c == '(') {
                 operators.push(s);
             } else if(c == ')') {
-                transferAllToTokenListUntilOpenParenthesisFound(tokens, operators);
+                tokens.addAll(popOffAllUntilOpenParenthesisFound(operators));
+                operators.pop();
             } else if(isVariable(c)) {
                 tokens.add(s);
+            } else if(c == 'l') {
+                // TODO check if is log operation
             } else {
                 throw new QueryParseException("Unrecognized token: " + c);
             }
@@ -52,20 +55,26 @@ public class InfixToReversePolishTransformer {
         return tokens;
     }
 
-    private static void transferAllToTokenListUntilOpenParenthesisFound(List<String> tokens, Stack<String> operators) {
+    private static List<String> popOffAllUntilOpenParenthesisFound(Stack<String> operators) {
+        List<String> tokens = new LinkedList<>();
+
         while (!"(".equals(operators.peek())) {
             tokens.add(operators.pop());
         }
 
-        operators.pop();
+        return tokens;
     }
 
-    private static void transferAllWithLowerPrecedenceToTokenList(List<String> tokens, Stack<String> operators, int precedence) {
+    private static List<String> popOffAllWithLowerPrecedence(Stack<String> operators, int precedence) {
+        List<String> tokens = new LinkedList<>();
+
         while (!operators.isEmpty()
                 && operatorToPrecedenceMap.containsKey(operators.peek())
                 && precedence <= operatorToPrecedenceMap.get(operators.peek())) {
             tokens.add(operators.pop());
         }
+
+        return tokens;
     }
 
     private static boolean isVariable(char c) {

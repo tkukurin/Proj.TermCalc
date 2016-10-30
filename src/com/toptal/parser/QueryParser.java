@@ -18,7 +18,7 @@ public class QueryParser {
             } else if("x".equals(token)) {
                 nodes.push(new LinearPolynomialNode(null, 1.0));
             } else {
-                // getOperation(token).execute(nodes);
+                // nodes.push(getOperation(token).execute(nodes));
             }
         });
 
