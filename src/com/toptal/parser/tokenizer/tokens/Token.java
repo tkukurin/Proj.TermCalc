@@ -1,6 +1,7 @@
 package com.toptal.parser.tokenizer.tokens;
 
 import com.toptal.parser.LinearPolynomialNode;
+import com.toptal.parser.QueryParseException;
 
 import java.util.Stack;
 
@@ -20,6 +21,8 @@ public abstract class Token {
 
     public String getRepresentation() { return this.representation; }
 
-    public void evaluate(Stack<LinearPolynomialNode> valueStack) {}
+    public void evaluate(Stack<LinearPolynomialNode> valueStack) {
+        throw new QueryParseException("Encountered unexpected token evaluating input: '" + this.representation + "'");
+    }
 
 }

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class QueryParser {
 
     public static QueryParseResult parse(String query) {
-        String[] splitByEquals = query.split("=");
+        String[] splitByEquals = query.replaceAll(" ", "").split("=");
 
         if(splitByEquals.length > 2) {
             throw new QueryParseException("Equation should contain only one equality sign");

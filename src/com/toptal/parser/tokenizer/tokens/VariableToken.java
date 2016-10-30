@@ -6,8 +6,8 @@ import java.util.Stack;
 
 public class VariableToken extends Token {
 
-    public VariableToken(String representation) {
-        super(false, representation);
+    public VariableToken() {
+        super(false, "x");
     }
 
     @Override

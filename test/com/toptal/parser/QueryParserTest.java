@@ -67,4 +67,35 @@ public class QueryParserTest {
 
         assertEquals((1+2) * (22+3), result.getFreeValue().get(), EPSILON);
     }
+
+    @Test
+    public void shouldHandleImplicitUnaryMinus() throws Exception {
+        // given
+        String givenInput = "-3 + (-2)";
+
+        // when
+        LinearPolynomialNode result = QueryParser._parse(givenInput);
+
+        // then
+        assertTrue(result.getFreeValue().isPresent());
+        assertFalse(result.getBoundValue().isPresent());
+
+        assertEquals(-3 - 2, result.getFreeValue().get(), EPSILON);
+    }
+
+    @Test
+    public void shouldHandleImplicitUnaryMinusOnVariable() throws Exception {
+        // given
+        String givenInput = "-x + 2";
+
+        // when
+        LinearPolynomialNode result = QueryParser._parse(givenInput);
+
+        // then
+        assertTrue(result.getFreeValue().isPresent());
+        assertTrue(result.getBoundValue().isPresent());
+
+        assertEquals(2, result.getFreeValue().get(), EPSILON);
+        assertEquals(-1, result.getBoundValue().get(), EPSILON);
+    }
 }

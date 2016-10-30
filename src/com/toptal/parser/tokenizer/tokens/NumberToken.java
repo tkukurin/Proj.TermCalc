@@ -2,6 +2,7 @@
 package com.toptal.parser.tokenizer.tokens;
 
 import com.toptal.parser.LinearPolynomialNode;
+import com.toptal.parser.QueryParseException;
 
 import java.util.Stack;
 
@@ -12,10 +13,11 @@ public class NumberToken extends Token {
 
     @Override
     public void evaluate(Stack<LinearPolynomialNode> valueStack) {
-        valueStack.push(new LinearPolynomialNode(Double.parseDouble(representation), null));
+        try {
+            valueStack.push(new LinearPolynomialNode(Double.parseDouble(representation), null));
+        } catch(NumberFormatException e) {
+            throw new QueryParseException("Invalid double value: " + representation);
+        }
     }
 
-    public static boolean isValid(char c) {
-        return Character.isDigit(c) || c == '.';
-    }
 }

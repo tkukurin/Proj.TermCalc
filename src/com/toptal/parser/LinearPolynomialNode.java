@@ -4,12 +4,12 @@ import java.util.Optional;
 
 public class LinearPolynomialNode {
     private Double freeValue;
-    private Double valueBoundToX;
+    private Double xCoefficient;
 
     public LinearPolynomialNode(Double freeValue,
-                                Double valueBoundToX) {
+                                Double xCoefficient) {
         this.freeValue = freeValue;
-        this.valueBoundToX = valueBoundToX;
+        this.xCoefficient = xCoefficient;
     }
 
     public Optional<Double> getFreeValue() {
@@ -17,7 +17,7 @@ public class LinearPolynomialNode {
     }
 
     public Optional<Double> getBoundValue() {
-        return Optional.ofNullable(valueBoundToX);
+        return Optional.ofNullable(xCoefficient);
     }
 
 
@@ -36,13 +36,13 @@ public class LinearPolynomialNode {
     }
 
     public LinearPolynomialNode subtract(LinearPolynomialNode second) {
-        return add(negate(second));
+        return add(second.negate());
     }
 
-    private LinearPolynomialNode negate(LinearPolynomialNode second) {
+    public LinearPolynomialNode negate() {
         return new LinearPolynomialNode(
-                second.getFreeValue().map(val -> -val).orElse(null),
-                second.getBoundValue().map(val -> -val).orElse(null));
+                this.getFreeValue().map(val -> -val).orElse(null),
+                this.getBoundValue().map(val -> -val).orElse(null));
     }
 
     public LinearPolynomialNode mutliply(LinearPolynomialNode second) {
@@ -63,10 +63,6 @@ public class LinearPolynomialNode {
         }
 
         return new LinearPolynomialNode(resultFree, resultBound);
-    }
-
-    private boolean bothHaveBoundValues(LinearPolynomialNode first, LinearPolynomialNode second) {
-        return this.getBoundValue().isPresent() && second.getBoundValue().isPresent();
     }
 
     public LinearPolynomialNode divide(LinearPolynomialNode second) {
@@ -98,6 +94,10 @@ public class LinearPolynomialNode {
 
     private boolean eitherHasBoundValues(LinearPolynomialNode first, LinearPolynomialNode second) {
         return this.getBoundValue().isPresent() || second.getBoundValue().isPresent();
+    }
+
+    private boolean bothHaveBoundValues(LinearPolynomialNode first, LinearPolynomialNode second) {
+        return this.getBoundValue().isPresent() && second.getBoundValue().isPresent();
     }
 
     private double valueOrZero(Optional<Double> value) {

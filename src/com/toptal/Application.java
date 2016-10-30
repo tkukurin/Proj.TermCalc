@@ -46,7 +46,7 @@ public class Application {
         } catch(QueryParseException e) {
             return "Malformed query: " + e.getLocalizedMessage();
         } catch(Exception e) {
-            return "Error evaluating: " + e.getLocalizedMessage();
+            return "Error evaluating: " + e.getMessage();
         }
     }
 

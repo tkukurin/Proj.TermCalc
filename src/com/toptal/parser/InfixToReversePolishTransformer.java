@@ -9,6 +9,7 @@ import java.util.*;
 public class InfixToReversePolishTransformer {
     private static final Map<Class<? extends Token>, Integer> operatorToPrecedenceMap = new HashMap<>();
     static {
+        operatorToPrecedenceMap.put(MinusUnaryOperatorToken.class, 3);
         operatorToPrecedenceMap.put(DivisionOperatorToken.class, 2);
         operatorToPrecedenceMap.put(MultiplicationOperatorToken.class, 2);
         operatorToPrecedenceMap.put(AddOperatorToken.class, 1);
@@ -27,13 +28,16 @@ public class InfixToReversePolishTransformer {
             operatorStack.push(token);
         };
 
+        TriConsumer pushOntoOperatorStack = (token, tokenList, operatorsStack) -> operatorsStack.push(token);
+
         tokenToOperationMap.put(NumberToken.class, (token, tokenList, operatorStack) -> tokenList.add(token));
         tokenToOperationMap.put(MultiplicationOperatorToken.class, binaryOperationHandler);
         tokenToOperationMap.put(AddOperatorToken.class, binaryOperationHandler);
         tokenToOperationMap.put(SubtractionOperatorToken.class, binaryOperationHandler);
         tokenToOperationMap.put(DivisionOperatorToken.class, binaryOperationHandler);
-        tokenToOperationMap.put(LogarithmOperatorToken.class, (token, tokenList, operatorsStack) -> operatorsStack.push(token));
-        tokenToOperationMap.put(OpenParenthesisToken.class, (token, tokenList, operatorStack) -> operatorStack.push(token));
+        tokenToOperationMap.put(LogarithmOperatorToken.class, pushOntoOperatorStack);
+        tokenToOperationMap.put(MinusUnaryOperatorToken.class, pushOntoOperatorStack);
+        tokenToOperationMap.put(OpenParenthesisToken.class, pushOntoOperatorStack);
         tokenToOperationMap.put(CloseParenthesisToken.class, (token, tokenList, operatorStack) -> {
             tokenList.addAll(popOffAllUntilOpenParenthesisFound(operatorStack));
             operatorStack.pop();
@@ -43,7 +47,6 @@ public class InfixToReversePolishTransformer {
             }
         });
         tokenToOperationMap.put(VariableToken.class, (token, tokenList, operatorStack) -> tokenList.add(token));
-        tokenToOperationMap.put(UnaryOperatorToken.class, (token, tokenList, operatorStack) -> operatorStack.push(token));
 
     }
 
