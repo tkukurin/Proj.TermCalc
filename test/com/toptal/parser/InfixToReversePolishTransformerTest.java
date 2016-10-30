@@ -55,6 +55,30 @@ public class InfixToReversePolishTransformerTest {
         assertContainsInOrder(tokens, "1", "2", "+", "3", "*", "4", "7", "-", "/");
     }
 
+    @Test
+    public void shouldHandleCaseWithNoMultiplicationSignAndParentheses() throws Exception {
+        // given
+        String givenInput = "2(1+2)";
+
+        // when
+        List<String> tokens = InfixToReversePolishTransformer.parse(givenInput);
+
+        // then
+        assertContainsInOrder(tokens, "2", "1", "2", "+", "*");
+    }
+
+    @Test
+    public void shouldHandleCaseWithNoMultiplicationSignAndX() throws Exception {
+        // given
+        String givenInput = "2(2x + 2)";
+
+        // when
+        List<String> tokens = InfixToReversePolishTransformer.parse(givenInput);
+
+        // then
+        assertContainsInOrder(tokens, "2", "2", "x", "*", "2", "+", "*");
+    }
+
     private <T> void assertContainsInOrder(List<T> tokens, T ... values) {
         Assert.assertArrayEquals(tokens.toArray(), values);
     }

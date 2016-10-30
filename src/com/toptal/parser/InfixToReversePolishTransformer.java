@@ -1,13 +1,12 @@
 package com.toptal.parser;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
+import com.toptal.parser.tokenizer.Tokenizer;
+
 import java.util.*;
 
 public class InfixToReversePolishTransformer {
 
-    private static final Map<String, Integer> operatorToPrecedenceMap = new HashMap<>();
+    public static final Map<String, Integer> operatorToPrecedenceMap = new HashMap<>();
     static {
         operatorToPrecedenceMap.put("/", 2);
         operatorToPrecedenceMap.put("*", 2);
@@ -16,36 +15,34 @@ public class InfixToReversePolishTransformer {
     }
 
     public static List<String> parse(String query) {
+        Tokenizer tokenizer = new Tokenizer(query);
+
         List<String> tokens = new LinkedList<>();
         Stack<String> operators = new Stack<>();
+        String nextToken = tokenizer.next();
 
-        for(int i = 0; i < query.length(); i++) {
-            char c = query.charAt(i);
-            String s = Character.toString(c);
-
-            if (Character.isWhitespace(c)) {
-                continue;
-            }
+        while(!"EOF".equals(nextToken)) {
+            char c = nextToken.charAt(0);
 
             if (canBeParsedAsDouble(c)) {
-                int endIndex = findEndingIndexForDoubleChar(query, i + 1);
-                tokens.add(query.substring(i, endIndex));
-                i = endIndex - 1;
-            } else if(operatorToPrecedenceMap.containsKey(s)) {
-                tokens.addAll(popOffAllWithLowerPrecedence(operators, operatorToPrecedenceMap.get(s)));
-                operators.push(s);
+                tokens.add(nextToken);
+            } else if(operatorToPrecedenceMap.containsKey(nextToken)) {
+                tokens.addAll(popOffAllWithLowerPrecedence(operators, operatorToPrecedenceMap.get(nextToken)));
+                operators.push(nextToken);
             } else if(c == '(') {
-                operators.push(s);
+                operators.push(nextToken);
             } else if(c == ')') {
                 tokens.addAll(popOffAllUntilOpenParenthesisFound(operators));
                 operators.pop();
             } else if(isVariable(c)) {
-                tokens.add(s);
+                tokens.add(nextToken);
             } else if(c == 'l') {
-                // TODO check if is log operation
+                operators.push(nextToken);
             } else {
                 throw new QueryParseException("Unrecognized token: " + c);
             }
+
+            nextToken = tokenizer.next();
         }
 
         while(!operators.isEmpty()) {
@@ -58,8 +55,12 @@ public class InfixToReversePolishTransformer {
     private static List<String> popOffAllUntilOpenParenthesisFound(Stack<String> operators) {
         List<String> tokens = new LinkedList<>();
 
-        while (!"(".equals(operators.peek())) {
+        while (!operators.isEmpty() && !"(".equals(operators.peek())) {
             tokens.add(operators.pop());
+        }
+
+        if(operators.isEmpty()) {
+            throw new QueryParseException("Mismatched parentheses");
         }
 
         return tokens;
@@ -79,14 +80,6 @@ public class InfixToReversePolishTransformer {
 
     private static boolean isVariable(char c) {
         return c == 'x';
-    }
-
-    private static int findEndingIndexForDoubleChar(String query, int startAt) {
-        while(startAt < query.length() && canBeParsedAsDouble(query.charAt(startAt)) ) {
-            startAt++;
-        }
-
-        return startAt;
     }
 
     private static boolean canBeParsedAsDouble(char c) {

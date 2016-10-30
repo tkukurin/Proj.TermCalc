@@ -5,7 +5,9 @@ import com.toptal.parser.QueryParseException;
 import com.toptal.parser.QueryParser;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class Application {
 
@@ -48,8 +50,13 @@ public class Application {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        CalculatorEnvironment environment = new CalculatorEnvironment(">",
+                new Scanner(System.in),
+                new OutputStreamWriter(System.out));
 
+        Application application = new Application(environment, new QueryParser(), "exit");
+        application.run();
     }
 
 }

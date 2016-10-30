@@ -19,4 +19,5 @@ public class LinearPolynomialNode {
     public Optional<Double> getBoundValue() {
         return Optional.ofNullable(valueBoundToX);
     }
+
 }

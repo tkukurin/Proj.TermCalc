@@ -1,11 +1,13 @@
 package com.toptal.parser;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Stack;
+import com.toptal.parser.result.QueryParseNumericResult;
+import com.toptal.parser.result.QueryParseResult;
+import com.toptal.parser.result.QueryParseVariableResult;
+
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class QueryParser {
 
@@ -24,7 +26,33 @@ public class QueryParser {
         unaryOperationsMap.put("log", operationExecutor::logarithm);
     }
 
-    public static LinearPolynomialNode parse(String query) {
+    public static QueryParseResult parse(String query) {
+        String[] splitByEquals = query.split("=");
+
+        if(splitByEquals.length > 2) {
+            throw new QueryParseException("Too many equality signs encountered");
+        }
+
+        List<LinearPolynomialNode> solutions = Arrays.stream(splitByEquals)
+                .map(QueryParser::_parse)
+                .collect(Collectors.toList());
+
+        if(solutions.size() == 1) {
+            return new QueryParseNumericResult(solutions.get(0).getFreeValue().get());
+        }
+
+        LinearPolynomialNode lhs = solutions.get(0);
+        LinearPolynomialNode rhs = solutions.get(1);
+
+        LinearPolynomialNode x = new LinearPolynomialNode(
+                null, lhs.getBoundValue().orElse(0.0) - rhs.getBoundValue().orElse(0.0));
+        LinearPolynomialNode free = new LinearPolynomialNode(
+                -lhs.getFreeValue().orElse(0.0) + rhs.getFreeValue().orElse(0.0), null);
+
+        return new QueryParseVariableResult(free.getFreeValue().get() / x.getBoundValue().get());
+    }
+
+    public static LinearPolynomialNode _parse(String query) {
         Stack<LinearPolynomialNode> nodes = new Stack<>();
 
         InfixToReversePolishTransformer.parse(query).forEach(token -> {

@@ -33,17 +33,15 @@ public class LinearPolynomialNodeOperation {
             throw new QueryParseException("Only linear equations are supported by this software");
         }
 
-        Double resultFree = first.getFreeValue()
-                .map(freeValue -> freeValue * second.getFreeValue().orElse(1.0))
-                .orElse(second.getFreeValue().orElse(null));
-
-        Double resultBound = null;
-
-        if(first.getBoundValue().isPresent()) {
-            resultBound = first.getBoundValue().get() * second.getFreeValue().orElse(1.0);
+        Double resultFree = null;
+        if(first.getFreeValue().isPresent() && second.getFreeValue().isPresent()) {
+            resultFree = first.getFreeValue().get() * second.getFreeValue().get();
         }
 
-        if(second.getBoundValue().isPresent()) {
+        Double resultBound = null;
+        if(first.getBoundValue().isPresent()) {
+            resultBound = first.getBoundValue().get() * second.getFreeValue().orElse(1.0);
+        } else if(second.getBoundValue().isPresent()) {
             resultBound = second.getBoundValue().get() * first.getFreeValue().orElse(1.0);
         }
 
