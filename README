@@ -25,5 +25,8 @@ output: x = 0.25
 ## Checklist
 
 [ ] app should handle 0x = N as an error, probably introduce new exception type
-[ ] parser should probably be handled as (lexer, executor) pipeline
+[x] parser should probably be handled as (lexer, executor) pipeline
 [ ] QueryParseException is not right for LinearPolynomialNodeOperation, introduce new exception type (OperationException?)
+[ ] handle large values ?
+[ ] handle comma vs. point decimal separator?
+[ ] remove static methods
