@@ -1,4 +1,4 @@
-package com.toptal.parser;
+package com.toptal.parser.exception;
 
 public class QueryParseException extends RuntimeException {
 

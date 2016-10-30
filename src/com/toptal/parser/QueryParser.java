@@ -1,65 +1,67 @@
 package com.toptal.parser;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import com.toptal.parser.exception.QueryParseException;
+import com.toptal.parser.result.QueryParseNumericResult;
+import com.toptal.parser.result.QueryParseResult;
+
+import java.util.Arrays;
+import java.util.EmptyStackException;
+import java.util.List;
 import java.util.Stack;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class QueryParser {
+    private static final String EQUALITY_SIGN = "=";
+    private static final String SPACE = " ";
+    private static final String EMPTY_STRING = "";
 
-    private static final Map<String, BiFunction<LinearPolynomialNode, LinearPolynomialNode, LinearPolynomialNode>>
-            binaryOperationsMap = new HashMap<>();
-    private static final Map<String, Function<LinearPolynomialNode, LinearPolynomialNode>>
-            unaryOperationsMap = new HashMap<>();
-    private static final LinearPolynomialNodeOperation operationExecutor = new LinearPolynomialNodeOperation();
+    private final LinearEquationSolver equationSolver;
+    private final InfixToReversePolishTransformer infixToReversePolishTransformer;
 
-    static {
-        binaryOperationsMap.put("+", operationExecutor::add);
-        binaryOperationsMap.put("-", operationExecutor::subtract);
-        binaryOperationsMap.put("/", operationExecutor::divide);
-        binaryOperationsMap.put("*", operationExecutor::mutliply);
-
-        unaryOperationsMap.put("log", operationExecutor::logarithm);
+    public QueryParser(LinearEquationSolver equationSolver,
+                       InfixToReversePolishTransformer infixToReversePolishTransformer) {
+        this.equationSolver = equationSolver;
+        this.infixToReversePolishTransformer = infixToReversePolishTransformer;
     }
 
-    public static LinearPolynomialNode parse(String query) {
+    public QueryParseResult parse(String query) {
+        String[] splitByEquals = query.replaceAll(SPACE, EMPTY_STRING).split(EQUALITY_SIGN);
+
+        if (splitByEquals.length > 2) {
+            throw new QueryParseException("Equation should contain only one equality sign");
+        }
+
+        List<LinearPolynomialNode> solutions = Arrays.stream(splitByEquals)
+                .map(this::parseSingleQuery)
+                .collect(Collectors.toList());
+
+        return solutions.size() == 1
+                ? simpleSolution(solutions.get(0))
+                : equationSolver.solve(solutions.get(0), solutions.get(1));
+    }
+
+    private QueryParseResult simpleSolution(LinearPolynomialNode linearPolynomialNode) {
+        if (linearPolynomialNode.getBoundValue().isPresent()) {
+            throw new QueryParseException("Linear equation should contain a right hand side");
+        }
+
+        return new QueryParseNumericResult(linearPolynomialNode.getFreeValue().get());
+    }
+
+    private LinearPolynomialNode parseSingleQuery(String query) {
         Stack<LinearPolynomialNode> nodes = new Stack<>();
 
-        InfixToReversePolishTransformer.parse(query).forEach(token -> {
-            Optional<Double> tokenAsDouble = tryParseAsDouble(token);
+        try {
+            infixToReversePolishTransformer.parse(query).forEach(token -> token.evaluate(nodes));
+        } catch(EmptyStackException e) {
+            throw new QueryParseException("Missing operands in input string");
+        }
 
-            if(tokenAsDouble.isPresent()) {
-                nodes.push(new LinearPolynomialNode(tokenAsDouble.get(), null));
-            } else if("x".equals(token)) {
-                nodes.push(new LinearPolynomialNode(null, 1.0));
-            } else if(binaryOperationsMap.containsKey(token)) {
-                LinearPolynomialNode above = nodes.pop();
-                LinearPolynomialNode below = nodes.pop();
-                LinearPolynomialNode result = binaryOperationsMap.get(token).apply(below, above);
-                nodes.push(result);
-            } else if(unaryOperationsMap.containsKey(token)) {
-                LinearPolynomialNode result = unaryOperationsMap.get(token).apply(nodes.pop());
-                nodes.push(result);
-            } else {
-                throw new QueryParseException("Unexpected token: " + token);
-            }
-        });
-
-        if(nodes.size() != 1) {
+        if (nodes.size() != 1) {
             throw new QueryParseException("Syntax error in input string");
         }
 
         return nodes.pop();
-    }
-
-    private static Optional<Double> tryParseAsDouble(String token) {
-        try {
-            return Optional.of(Double.parseDouble(token));
-        } catch (Exception ignore) {}
-
-        return Optional.empty();
     }
 
 }

@@ -1,8 +1,16 @@
 package com.toptal.parser;
 
+import com.toptal.DefaultInfixTransformerBundle;
+import com.toptal.DefaultTokenizerBundle;
+import com.toptal.parser.result.QueryParseResult;
+import com.toptal.parser.tokenizer.TokenizerFactory;
+import com.toptal.parser.tokenizer.tokens.Token;
+import com.toptal.parser.tokenizer.tokens.state.StartToken;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 public class QueryParserTest {
 
@@ -13,28 +21,107 @@ public class QueryParserTest {
         // given
         String givenInput = "1 + 2 / 3";
 
+        TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
+        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
+        InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
+
         // when
-        LinearPolynomialNode result = QueryParser.parse(givenInput);
+        QueryParseResult result = new QueryParser(givenLinearEquationSolver, givenInfixToReversePolishTransformer)
+                .parse(givenInput);
 
         // then
-        assertTrue(result.getFreeValue().isPresent());
-        assertFalse(result.getBoundValue().isPresent());
-
-        assertEquals(1.0 + 2.0 / 3.0, result.getFreeValue().get(), EPSILON);
+        assertEquals(1.0 + 2.0 / 3.0, result.getSolution(), EPSILON);
     }
+
 
     @Test
     public void shouldParseNestedParentheses() throws Exception {
         // given
         String givenInput = "(1.22 + 2) / ((3.1111223 - 7) * 2)";
 
+        TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
+        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
+        InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
+
         // when
-        LinearPolynomialNode result = QueryParser.parse(givenInput);
+        QueryParseResult result = new QueryParser(givenLinearEquationSolver, givenInfixToReversePolishTransformer)
+                .parse(givenInput);
 
         // then
-        assertTrue(result.getFreeValue().isPresent());
-        assertFalse(result.getBoundValue().isPresent());
+        assertEquals((1.22 + 2) / ((3.1111223 - 7) * 2), result.getSolution(), EPSILON);
+    }
 
-        assertEquals((1.22 + 2) / ((3.1111223 - 7) * 2), result.getFreeValue().get(), EPSILON);
+    @Test
+    public void shouldHandleCaseWithNoMultiplicationSign() throws Exception {
+        // given
+        String givenInput = "24(1 - 19)";
+
+        TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
+        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
+        InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
+
+        // when
+        QueryParseResult result = new QueryParser(givenLinearEquationSolver, givenInfixToReversePolishTransformer)
+                .parse(givenInput);
+
+        // then
+        assertEquals(24*(1-19), result.getSolution(), EPSILON);
+    }
+
+    @Test
+    public void shouldHandleCaseWithTwoParentheses() throws Exception {
+        // given
+        String givenInput = "(1+2)(22+3)";
+
+        TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
+        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
+        InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
+
+        // when
+        QueryParseResult result = new QueryParser(givenLinearEquationSolver, givenInfixToReversePolishTransformer)
+                .parse(givenInput);
+
+        // then
+        assertEquals((1+2)*(22+3), result.getSolution(), EPSILON);
+    }
+
+    @Test
+    public void shouldHandleImplicitUnaryMinus() throws Exception {
+        // given
+        String givenInput = "-3 + (-2)";
+
+        TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
+        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
+        InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
+
+        // when
+        QueryParseResult result = new QueryParser(givenLinearEquationSolver, givenInfixToReversePolishTransformer)
+                .parse(givenInput);
+
+        // then
+        assertEquals(-5.0, result.getSolution(), EPSILON);
+    }
+
+    @Test
+    public void shouldHandleImplicitUnaryMinusOnVariable() throws Exception {
+        // given
+        String givenInput = "-x + 2 = 0";
+
+        TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
+        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
+        InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
+
+        // when
+        QueryParseResult result = new QueryParser(givenLinearEquationSolver, givenInfixToReversePolishTransformer)
+                .parse(givenInput);
+
+        // then
+        assertEquals(2.0, result.getSolution(), EPSILON);
     }
 }

@@ -1,6 +1,6 @@
 package com.toptal.parser.result;
 
-public class QueryParseResult {
+public abstract class QueryParseResult {
 
     private final double solution;
 
