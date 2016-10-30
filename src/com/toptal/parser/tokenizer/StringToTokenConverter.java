@@ -6,13 +6,13 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
-class StringToTokenConverter {
+public class StringToTokenConverter {
 
     private final BiPredicate<Character, Token> currentCharacterAndTokenPredicate;
     private final BiFunction<String, Integer, Integer> endingPositionFinder;
     private final Function<String, Token> newTokenCreator;
 
-    StringToTokenConverter(BiPredicate<Character, Token> currentCharacterAndTokenPredicate,
+    public StringToTokenConverter(BiPredicate<Character, Token> currentCharacterAndTokenPredicate,
                                   BiFunction<String, Integer, Integer> endingPositionFinder,
                                   Function<String, Token> newTokenCreator) {
         this.currentCharacterAndTokenPredicate = currentCharacterAndTokenPredicate;

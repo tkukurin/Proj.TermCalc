@@ -1,4 +1,6 @@
-package com.toptal.parser.tokenizer.tokens;
+package com.toptal.parser.tokenizer.tokens.state;
+
+import com.toptal.parser.tokenizer.tokens.Token;
 
 public class OpenParenthesisToken extends Token {
     public OpenParenthesisToken() {

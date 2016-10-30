@@ -1,14 +1,14 @@
 package com.toptal.parser.tokenizer.tokens;
 
 import com.toptal.parser.LinearPolynomialNode;
-import com.toptal.parser.QueryParseException;
+import com.toptal.parser.exception.QueryParseException;
 
 import java.util.Stack;
 
 public abstract class Token {
 
     private final boolean isEndingState;
-    protected final String representation;
+    private final String representation;
 
     public Token(boolean isEndingState, String representation) {
         this.isEndingState = isEndingState;

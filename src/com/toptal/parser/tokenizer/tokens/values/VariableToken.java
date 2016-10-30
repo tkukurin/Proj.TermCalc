@@ -1,6 +1,7 @@
-package com.toptal.parser.tokenizer.tokens;
+package com.toptal.parser.tokenizer.tokens.values;
 
 import com.toptal.parser.LinearPolynomialNode;
+import com.toptal.parser.tokenizer.tokens.Token;
 
 import java.util.Stack;
 

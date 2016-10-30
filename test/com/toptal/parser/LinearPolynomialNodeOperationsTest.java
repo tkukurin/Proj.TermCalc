@@ -1,5 +1,6 @@
 package com.toptal.parser;
 
+import com.toptal.parser.exception.QueryParseException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

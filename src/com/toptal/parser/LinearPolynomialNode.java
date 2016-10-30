@@ -1,5 +1,7 @@
 package com.toptal.parser;
 
+import com.toptal.parser.exception.QueryParseException;
+
 import java.util.Optional;
 
 public class LinearPolynomialNode {
@@ -19,7 +21,6 @@ public class LinearPolynomialNode {
     public Optional<Double> getBoundValue() {
         return Optional.ofNullable(xCoefficient);
     }
-
 
     public LinearPolynomialNode add(LinearPolynomialNode second) {
         Double resultFree = null, resultBound = null;
@@ -70,9 +71,7 @@ public class LinearPolynomialNode {
             throw new QueryParseException("This software does not support division with linear equations");
         }
 
-        // in case of divison by zero, let the exception propagate.
         double divisionResult = valueOrZero(this.getFreeValue()) / valueOrZero(second.getFreeValue());
-
         return new LinearPolynomialNode(divisionResult, null);
     }
 
