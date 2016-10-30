@@ -88,15 +88,15 @@ public class LinearPolynomialNode {
     }
 
     private boolean eitherHasFreeValues(LinearPolynomialNode first, LinearPolynomialNode second) {
-        return this.getFreeValue().isPresent() || second.getFreeValue().isPresent();
+        return first.getFreeValue().isPresent() || second.getFreeValue().isPresent();
     }
 
     private boolean eitherHasBoundValues(LinearPolynomialNode first, LinearPolynomialNode second) {
-        return this.getBoundValue().isPresent() || second.getBoundValue().isPresent();
+        return first.getBoundValue().isPresent() || second.getBoundValue().isPresent();
     }
 
     private boolean bothHaveBoundValues(LinearPolynomialNode first, LinearPolynomialNode second) {
-        return this.getBoundValue().isPresent() && second.getBoundValue().isPresent();
+        return first.getBoundValue().isPresent() && second.getBoundValue().isPresent();
     }
 
     private double valueOrZero(Optional<Double> value) {
