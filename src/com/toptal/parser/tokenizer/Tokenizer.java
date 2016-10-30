@@ -1,95 +1,128 @@
 package com.toptal.parser.tokenizer;
 
-import com.toptal.parser.InfixToReversePolishTransformer;
 import com.toptal.parser.QueryParseException;
+import com.toptal.parser.tokenizer.tokens.*;
+import com.toptal.parser.tokenizer.tokens.operators.*;
+import org.omg.CORBA.INTERNAL;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
 public class Tokenizer {
 
-    private String state;
+    private static final Map<Character, Supplier<Token>> singleCharacterToSupplier = new HashMap<>();
+
+    static {
+        singleCharacterToSupplier.put('+', AddOperatorToken::new);
+        singleCharacterToSupplier.put('-', SubtractionOperatorToken::new);
+        singleCharacterToSupplier.put('*', MultiplicationOperatorToken::new);
+        singleCharacterToSupplier.put('/', DivisionOperatorToken::new);
+        singleCharacterToSupplier.put('(', OpenParenthesisToken::new);
+        singleCharacterToSupplier.put(')', CloseParenthesisToken::new);
+        singleCharacterToSupplier.put('x', () -> new VariableToken("x"));
+    }
+
+    private Token currentToken;
     private int position;
 
     private final String input;
+    private final List<StringToTokenConverter> stringToTokenConverters;
 
     public Tokenizer(String input) {
         this.input = input;
         this.position = 0;
+        this.currentToken = new StartToken();
+        this.stringToTokenConverters = createTokenConverters();
     }
 
-    public String next() {
+    public Token next() {
 
         while (position < input.length() && Character.isWhitespace(currentCharacter())) {
             position++;
         }
 
-        if(position == input.length()) {
-            return "EOF";
+        if (position == input.length()) {
+            return new EofToken();
         }
 
-        if (canBeParsedAsDouble(currentCharacter())) {
-            final int startingPosition = position;
-            final int endingPosition = advancePositionToNextNonDoubleToken();
+        for (StringToTokenConverter stringToTokenConverter : stringToTokenConverters) {
+            if (stringToTokenConverter.accepts(currentCharacter())) {
+                int endingPos = stringToTokenConverter.findEndingPosition(input, position);
+                String representation = input.substring(position, endingPos);
 
-            state = "NUMBER";
+                this.currentToken = stringToTokenConverter.createToken(representation);
+                this.position = endingPos;
 
-            return input.substring(startingPosition, endingPosition);
-        }
-
-        if(InfixToReversePolishTransformer.operatorToPrecedenceMap.containsKey(currentCharacter() + "")) {
-            String operator = currentCharacter() + "";
-            state = "OPERATOR";
-
-            position++;
-            return operator;
-        }
-
-        if (currentCharacter() == '(') {
-            if("NUMBER".equals(state) || "CLOSE_PAREN".equals(state) || "VARIABLE".equals(state)) {
-                state = "OPERATOR";
-                return "*";
+                return this.currentToken;
             }
-
-            state = "OPEN_PAREN";
-            position++;
-            return "(";
         }
 
-        if(currentCharacter() == ')') {
-            position++;
-            state = "CLOSE_PAREN";
-            return ")";
-        }
-
-        if(currentCharacter() == 'x') {
-            if("NUMBER".equals(state)) {
-                state = "OPERATOR";
-                return "*";
-            }
-
-            state = "VARIABLE";
-            position++;
-            return "x";
-        }
-
-        if(currentCharacter() == 'l') {
-            // TODO parse log
-            position += 3;
-            state = "LOG";
-            return "log";
-        }
-
-        throw new QueryParseException("Error near character: "  + currentCharacter());
+        throw new QueryParseException("Unexpected character encountered: " + currentCharacter());
     }
 
-    private int advancePositionToNextNonDoubleToken() {
-        while(position < input.length() && canBeParsedAsDouble(currentCharacter())) {
+    private LinkedList<StringToTokenConverter> createTokenConverters() {
+        LinkedList<StringToTokenConverter> stringToTokenConverters = new LinkedList<>();
+
+        stringToTokenConverters.add(new StringToTokenConverter(
+                this::isStartOfDouble,
+                this::advancePositionToNextNonDoubleCharacter,
+                NumberToken::new));
+
+        stringToTokenConverters.add(new StringToTokenConverter(
+                this::isImplicitMultiplicationSign,
+                (input, position) -> position,
+                s -> new MultiplicationOperatorToken()));
+
+        stringToTokenConverters.add(new StringToTokenConverter(
+                singleCharacterToSupplier::containsKey,
+                (input, position) -> position + 1,
+                s -> singleCharacterToSupplier.get(s.charAt(0)).get()));
+
+        stringToTokenConverters.add(new StringToTokenConverter(
+                this::isLogarithmString,
+                (input, position) -> position + "og".length(),
+                s -> new LogarithmOperatorToken()));
+
+        return stringToTokenConverters;
+    }
+
+    private int remainAtCurrentPosition(String input, int position) {
+        return position;
+    }
+
+    private int advancePositionByOne(String input, int position) {
+        return position + 1;
+    }
+
+    private boolean isStartOfDouble(char c) {
+        return Character.isDigit(c) || c == '.';
+    }
+
+    private int advancePositionToNextNonDoubleCharacter(String input, int position) {
+        while (position < input.length() && isStartOfDouble(input.charAt(position))) {
             position++;
         }
 
         return position;
     }
 
-    private boolean canBeParsedAsDouble(char c) {
-        return Character.isDigit(c) || c == '.';
+    private boolean isLogarithmString(char current) {
+        return current == 'l'
+                && input.length() > position + "og".length()
+                && input.charAt(position + 1) == 'o'
+                && input.charAt(position + 2) == 'g';
+    }
+
+    private boolean isImplicitMultiplicationSign(char current) {
+        boolean lastTokenCanBeMultiplied = currentToken.getClass() == NumberToken.class ||
+                currentToken.getClass() == CloseParenthesisToken.class ||
+                currentToken.getClass() == VariableToken.class;
+
+        return (current == '(' || current == 'x') && lastTokenCanBeMultiplied
+                || (Character.isDigit(current) && currentToken.getClass() == CloseParenthesisToken.class);
     }
 
     private char currentCharacter() {

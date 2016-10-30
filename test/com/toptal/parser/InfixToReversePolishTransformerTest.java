@@ -1,9 +1,11 @@
 package com.toptal.parser;
 
+import com.toptal.parser.tokenizer.tokens.Token;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InfixToReversePolishTransformerTest {
 
@@ -13,7 +15,10 @@ public class InfixToReversePolishTransformerTest {
         String givenInput = "12.33 + 25.667812";
 
         // when
-        List<String> tokens = InfixToReversePolishTransformer.parse(givenInput);
+        List<String> tokens = InfixToReversePolishTransformer.parse(givenInput)
+                .stream()
+                .map(Token::getRepresentation)
+                .collect(Collectors.toList());
 
         // then
         assertContainsInOrder(tokens, "12.33", "25.667812", "+");
@@ -25,7 +30,10 @@ public class InfixToReversePolishTransformerTest {
         String givenInput = "1 + 2 * 3";
 
         // when
-        List<String> tokens = InfixToReversePolishTransformer.parse(givenInput);
+        List<String> tokens = InfixToReversePolishTransformer.parse(givenInput)
+                .stream()
+                .map(Token::getRepresentation)
+                .collect(Collectors.toList());
 
         // then
         assertContainsInOrder(tokens, "1", "2", "3", "*", "+");
@@ -37,7 +45,10 @@ public class InfixToReversePolishTransformerTest {
         String givenInput = "(1 + 2) * 3";
 
         // when
-        List<String> tokens = InfixToReversePolishTransformer.parse(givenInput);
+        List<String> tokens = InfixToReversePolishTransformer.parse(givenInput)
+                .stream()
+                .map(Token::getRepresentation)
+                .collect(Collectors.toList());
 
         // then
         assertContainsInOrder(tokens, "1", "2", "+", "3", "*");
@@ -49,7 +60,10 @@ public class InfixToReversePolishTransformerTest {
         String givenInput = "((1 + 2) * 3) / (4 - 7)";
 
         // when
-        List<String> tokens = InfixToReversePolishTransformer.parse(givenInput);
+        List<String> tokens = InfixToReversePolishTransformer.parse(givenInput)
+                .stream()
+                .map(Token::getRepresentation)
+                .collect(Collectors.toList());
 
         // then
         assertContainsInOrder(tokens, "1", "2", "+", "3", "*", "4", "7", "-", "/");
@@ -61,7 +75,10 @@ public class InfixToReversePolishTransformerTest {
         String givenInput = "2(1+2)";
 
         // when
-        List<String> tokens = InfixToReversePolishTransformer.parse(givenInput);
+        List<String> tokens = InfixToReversePolishTransformer.parse(givenInput)
+                .stream()
+                .map(Token::getRepresentation)
+                .collect(Collectors.toList());
 
         // then
         assertContainsInOrder(tokens, "2", "1", "2", "+", "*");
@@ -73,7 +90,10 @@ public class InfixToReversePolishTransformerTest {
         String givenInput = "2(2x + 2)";
 
         // when
-        List<String> tokens = InfixToReversePolishTransformer.parse(givenInput);
+        List<String> tokens = InfixToReversePolishTransformer.parse(givenInput)
+                .stream()
+                .map(Token::getRepresentation)
+                .collect(Collectors.toList());
 
         // then
         assertContainsInOrder(tokens, "2", "2", "x", "*", "2", "+", "*");
