@@ -2,40 +2,35 @@ package com.toptal.parser;
 
 import com.toptal.parser.result.QueryParseResult;
 
+import java.util.Optional;
+import java.util.Stack;
+
 public class QueryParser {
 
-    private char[] input;
-    private int position;
+    public static QueryParseResult parse(String query) {
+        Stack<LinearPolynomialNode> nodes = new Stack<>();
 
-    private QueryParser(String input) {
-        this.position = 0;
-        this.input = input.toCharArray();
-    }
+        InfixToReversePolishTransformer.parse(query).forEach(token -> {
+            Optional<Double> tokenAsDouble = tryParseAsDouble(token);
 
-    private QueryParseResult parse() {
-        while(Character.isWhitespace(input[position])) {
-            position++;
-        }
-
-        // or char starts with "." ?
-        if(Character.isDigit(input[position])) {
-            // push number.
-            parseNumeric();
-        }
-
-        if(input[position] == '(') {
-
-        }
+            if(tokenAsDouble.isPresent()) {
+                nodes.push(new LinearPolynomialNode(tokenAsDouble.get(), null));
+            } else if("x".equals(token)) {
+                nodes.push(new LinearPolynomialNode(null, 1.0));
+            } else {
+                // getOperation(token).execute(nodes);
+            }
+        });
 
         return null;
     }
 
-    private void parseNumeric() {
+    private static Optional<Double> tryParseAsDouble(String token) {
+        try {
+            return Optional.of(Double.parseDouble(token));
+        } catch (Exception ignore) {}
 
-    }
-
-    public static QueryParseResult parse(String input) {
-        return new QueryParser(input).parse();
+        return Optional.empty();
     }
 
 }
