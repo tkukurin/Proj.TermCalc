@@ -29,7 +29,7 @@ output: x = 0.25
 [ ] QueryParseException is not right for LinearPolynomialNodeOperation, introduce new exception type (OperationException?)
 [ ] handle large values ?
 [ ] handle comma vs. point decimal separator?
-[ ] remove static methods
+[x] remove static methods
 
 ## Notes
 
