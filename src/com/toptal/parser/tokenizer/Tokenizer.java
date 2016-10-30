@@ -3,7 +3,6 @@ package com.toptal.parser.tokenizer;
 import com.toptal.parser.QueryParseException;
 import com.toptal.parser.tokenizer.tokens.*;
 import com.toptal.parser.tokenizer.tokens.operators.*;
-import org.omg.CORBA.INTERNAL;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -82,8 +81,8 @@ public class Tokenizer {
                 s -> singleCharacterToSupplier.get(s.charAt(0)).get()));
 
         stringToTokenConverters.add(new StringToTokenConverter(
-                this::isLogarithmString,
-                (input, position) -> position + "og".length(),
+                c -> c == 'l',
+                (input, position) -> position + "log".length(),
                 s -> new LogarithmOperatorToken()));
 
         return stringToTokenConverters;
@@ -109,9 +108,8 @@ public class Tokenizer {
         return position;
     }
 
-    private boolean isLogarithmString(char current) {
-        return current == 'l'
-                && input.length() > position + "og".length()
+    private boolean isLogarithmString(String input, int position) {
+        return input.length() >= position + "og".length()
                 && input.charAt(position + 1) == 'o'
                 && input.charAt(position + 2) == 'g';
     }

@@ -13,8 +13,7 @@ public class LinearPolynomialNodeOperationsTest {
         LinearPolynomialNode second = new LinearPolynomialNode(1.0, 2.0);
 
         // when
-        LinearPolynomialNodeOperation operation = new LinearPolynomialNodeOperation();
-        LinearPolynomialNode result = operation.add(first, second);
+        LinearPolynomialNode result = first.add(second);
 
         // then
         assertEquals(Double.valueOf(1.0), result.getFreeValue().get());
@@ -28,8 +27,7 @@ public class LinearPolynomialNodeOperationsTest {
         LinearPolynomialNode second = new LinearPolynomialNode(1.0, 2.0);
 
         // when
-        LinearPolynomialNodeOperation operation = new LinearPolynomialNodeOperation();
-        LinearPolynomialNode result = operation.subtract(first, second);
+        LinearPolynomialNode result = first.subtract(second);
 
         // then
         assertEquals(Double.valueOf(-1.0), result.getFreeValue().get());
@@ -43,8 +41,7 @@ public class LinearPolynomialNodeOperationsTest {
         LinearPolynomialNode second = new LinearPolynomialNode(1.0, 2.0);
 
         // when
-        LinearPolynomialNodeOperation operation = new LinearPolynomialNodeOperation();
-        LinearPolynomialNode result = operation.mutliply(first, second);
+        LinearPolynomialNode result = first.mutliply(second);
 
         // then
         assertEquals(Double.valueOf(2.0), result.getFreeValue().get());
@@ -58,8 +55,7 @@ public class LinearPolynomialNodeOperationsTest {
         LinearPolynomialNode second = new LinearPolynomialNode(1.0, 2.0);
 
         // when
-        LinearPolynomialNodeOperation operation = new LinearPolynomialNodeOperation();
-        operation.mutliply(first, second);
+        first.mutliply(second);
 
         // then throws exception
     }
@@ -71,8 +67,7 @@ public class LinearPolynomialNodeOperationsTest {
         LinearPolynomialNode second = new LinearPolynomialNode(5.0, null);
 
         // when
-        LinearPolynomialNodeOperation operation = new LinearPolynomialNodeOperation();
-        LinearPolynomialNode result = operation.divide(first, second);
+        LinearPolynomialNode result = first.divide(second);
 
         // then
         assertEquals(Double.valueOf(2.0 / 5.0), result.getFreeValue().get());
@@ -85,8 +80,7 @@ public class LinearPolynomialNodeOperationsTest {
         LinearPolynomialNode second = new LinearPolynomialNode(1.0, 2.0);
 
         // when
-        LinearPolynomialNodeOperation operation = new LinearPolynomialNodeOperation();
-        operation.divide(first, second);
+        first.divide(second);
 
         // then throws exception
     }
@@ -97,8 +91,7 @@ public class LinearPolynomialNodeOperationsTest {
         LinearPolynomialNode node = new LinearPolynomialNode(2.0, null);
 
         // when
-        LinearPolynomialNodeOperation operation = new LinearPolynomialNodeOperation();
-        LinearPolynomialNode result = operation.logarithm(node);
+        LinearPolynomialNode result = node.logarithm();
 
         // then
         assertEquals(Double.valueOf(Math.log(2.0)), result.getFreeValue().get());
@@ -110,8 +103,7 @@ public class LinearPolynomialNodeOperationsTest {
         LinearPolynomialNode node = new LinearPolynomialNode(2.0, 1.0);
 
         // when
-        LinearPolynomialNodeOperation operation = new LinearPolynomialNodeOperation();
-        operation.logarithm(node);
+        node.logarithm();
 
         // then throws exception
     }

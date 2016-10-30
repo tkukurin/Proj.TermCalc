@@ -1,6 +1,6 @@
 package com.toptal.parser;
 
-import com.toptal.parser.tokenizer.*;
+import com.toptal.parser.tokenizer.Tokenizer;
 import com.toptal.parser.tokenizer.tokens.*;
 import com.toptal.parser.tokenizer.tokens.operators.*;
 
@@ -32,14 +32,24 @@ public class InfixToReversePolishTransformer {
         tokenToOperationMap.put(AddOperatorToken.class, binaryOperationHandler);
         tokenToOperationMap.put(SubtractionOperatorToken.class, binaryOperationHandler);
         tokenToOperationMap.put(DivisionOperatorToken.class, binaryOperationHandler);
+        tokenToOperationMap.put(LogarithmOperatorToken.class, (token, tokenList, operatorsStack) -> operatorsStack.push(token));
         tokenToOperationMap.put(OpenParenthesisToken.class, (token, tokenList, operatorStack) -> operatorStack.push(token));
         tokenToOperationMap.put(CloseParenthesisToken.class, (token, tokenList, operatorStack) -> {
             tokenList.addAll(popOffAllUntilOpenParenthesisFound(operatorStack));
             operatorStack.pop();
+
+            if(topOfStackIsUnaryOperation(operatorStack)) {
+                tokenList.add(operatorStack.pop());
+            }
         });
         tokenToOperationMap.put(VariableToken.class, (token, tokenList, operatorStack) -> tokenList.add(token));
         tokenToOperationMap.put(UnaryOperatorToken.class, (token, tokenList, operatorStack) -> operatorStack.push(token));
 
+    }
+
+    private static boolean topOfStackIsUnaryOperation(Stack<Token> operatorStack) {
+        return !operatorStack.isEmpty()
+                && operatorStack.peek().getClass().getSuperclass().equals(UnaryOperatorToken.class);
     }
 
     public static List<Token> parse(String query) {
