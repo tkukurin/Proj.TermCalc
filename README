@@ -29,8 +29,7 @@ output: x = 0.25
 [x] parser should probably be handled as (lexer, executor) pipeline
 [x] QueryParseException is not right for LinearPolynomialNodeOperation, introduce new exception type (OperationException?)
     -> note: PolynomialOperationException
-[ ] handle large values ?
-[ ] handle comma vs. point decimal separator?
+[x] handle comma vs. point decimal separator?
 [x] remove static methods
 
 ## Notes
