@@ -7,13 +7,13 @@ import com.toptal.parser.exception.QueryParseException;
 import java.io.IOException;
 import java.util.Objects;
 
-public class Application {
+class Application {
 
     private final CalculatorEnvironment environment;
     private final QueryParser parser;
     private final String applicationExitString;
 
-    public Application(CalculatorEnvironment environment,
+    Application(CalculatorEnvironment environment,
                        QueryParser parser,
                        String applicationExitString) {
         this.environment = environment;
@@ -21,7 +21,7 @@ public class Application {
         this.applicationExitString = applicationExitString;
     }
 
-    public void run() throws IOException {
+    void run() throws IOException {
         while (true) {
             String input = environment.requestUserInput();
 

@@ -36,11 +36,11 @@ public class QueryParser {
                 .collect(Collectors.toList());
 
         return solutions.size() == 1
-                ? simpleSolution(solutions.get(0))
+                ? getSimpleSolution(solutions.get(0))
                 : equationSolver.solve(solutions.get(0), solutions.get(1));
     }
 
-    private QueryParseResult simpleSolution(LinearPolynomialNode linearPolynomialNode) {
+    private QueryParseResult getSimpleSolution(LinearPolynomialNode linearPolynomialNode) {
         if (linearPolynomialNode.getBoundValue().isPresent()) {
             throw new QueryParseException("Linear equation should contain a right hand side");
         }

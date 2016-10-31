@@ -14,11 +14,11 @@ public class LinearPolynomialNode {
         this.xCoefficient = xCoefficient;
     }
 
-    public Optional<Double> getFreeValue() {
+    Optional<Double> getFreeValue() {
         return Optional.ofNullable(freeValue);
     }
 
-    public Optional<Double> getBoundValue() {
+    Optional<Double> getBoundValue() {
         return Optional.ofNullable(xCoefficient);
     }
 
@@ -102,5 +102,10 @@ public class LinearPolynomialNode {
     private double valueOrZero(Optional<Double> value) {
         return value.orElse(0.0);
     }
-    
+
+    @Override
+    public String toString() {
+        return "(" + valueOrZero(this.getBoundValue()) + "x" +
+                ") + (" + valueOrZero(this.getFreeValue()) + ")";
+    }
 }

@@ -19,10 +19,11 @@ public abstract class Token {
         return isEndingState;
     }
 
-    public String getRepresentation() { return this.representation; }
-
     public void evaluate(Stack<LinearPolynomialNode> valueStack) {
         throw new QueryParseException("Encountered unexpected token evaluating input: '" + this.representation + "'");
     }
+
+    @Override
+    public String toString() { return this.representation; }
 
 }

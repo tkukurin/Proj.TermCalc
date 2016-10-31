@@ -33,7 +33,7 @@ public class InfixToReversePolishTransformer {
             InfixTransformer tokenHandler = tokenToOperationMap.get(token.getClass());
 
             if(tokenHandler == null) {
-                throw new QueryParseException("Unrecognized token: " + token.getRepresentation());
+                throw new QueryParseException("Unrecognized token: " + token.toString());
             }
 
             tokenHandler.apply(token, tokens, operators);

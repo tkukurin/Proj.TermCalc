@@ -124,4 +124,7 @@ public class QueryParserTest {
         // then
         assertEquals(2.0, result.getSolution(), EPSILON);
     }
+
+
+
 }
