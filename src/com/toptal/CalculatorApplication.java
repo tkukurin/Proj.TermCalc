@@ -9,15 +9,15 @@ import com.toptal.parser.exception.QueryParseException;
 import java.io.IOException;
 import java.util.Objects;
 
-class Application {
+class CalculatorApplication {
 
     private final CalculatorEnvironment environment;
     private final QueryParser parser;
     private final String applicationExitString;
 
-    Application(CalculatorEnvironment environment,
-                       QueryParser parser,
-                       String applicationExitString) {
+    CalculatorApplication(CalculatorEnvironment environment,
+                          QueryParser parser,
+                          String applicationExitString) {
         this.environment = environment;
         this.parser = parser;
         this.applicationExitString = applicationExitString;
@@ -27,7 +27,7 @@ class Application {
         while (true) {
             String input = environment.requestUserInput();
 
-            if(isExitString(input)) {
+            if (isExitString(input)) {
                 break;
             }
 
@@ -49,7 +49,7 @@ class Application {
             return "Error applying operation: " + e.getLocalizedMessage();
         } catch (EquationSolveException e) {
             return "Error solving linear equation: " + e.getLocalizedMessage();
-        } catch(Exception e) {
+        } catch (Exception e) {
             return "Runtime error: " + e.getMessage();
         }
     }

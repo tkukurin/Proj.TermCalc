@@ -1,6 +1,6 @@
 package com.toptal;
 
-import com.toptal.parser.InfixTransformer;
+import com.toptal.parser.InfixToReversePolishTokenTransformer;
 import com.toptal.parser.exception.QueryParseException;
 import com.toptal.parser.tokenizer.tokens.Token;
 import com.toptal.parser.tokenizer.tokens.operators.*;
@@ -13,17 +13,18 @@ import java.util.*;
 
 public class DefaultInfixTransformerBundle {
 
-    public static Map<Class<? extends Token>, InfixTransformer> createTokenParsingMap() {
+    public static Map<Class<? extends Token>, InfixToReversePolishTokenTransformer> createTokenParsingMap() {
 
         final Map<Class<? extends Token>, Integer> operatorToPrecedenceMap = createOperatorPrecedenceMap();
-        final Map<Class<? extends Token>, InfixTransformer> tokenToOperationMap = new HashMap<>();
+        final Map<Class<? extends Token>, InfixToReversePolishTokenTransformer> tokenToOperationMap = new HashMap<>();
 
-        InfixTransformer precedenceHandler = (token, tokenList, operatorStack) -> {
-            tokenList.addAll(popAllWithLowerPrecedence(operatorToPrecedenceMap, operatorStack, operatorToPrecedenceMap.get(token.getClass())));
+        InfixToReversePolishTokenTransformer precedenceHandler = (token, tokenList, operatorStack) -> {
+            int currentTokenPrecedence = operatorToPrecedenceMap.get(token.getClass());
+            tokenList.addAll(popAllWithLowerPrecedence(operatorToPrecedenceMap, operatorStack, currentTokenPrecedence));
             operatorStack.push(token);
         };
-        InfixTransformer pushOntoOperatorStack = (token, tokenList, operatorsStack) -> operatorsStack.push(token);
-        InfixTransformer addToTokenList = (token, tokenList, operatorStack) -> tokenList.add(token);
+        InfixToReversePolishTokenTransformer pushOntoOperatorStack = (token, tokenList, operatorsStack) -> operatorsStack.push(token);
+        InfixToReversePolishTokenTransformer addToTokenList = (token, tokenList, operatorStack) -> tokenList.add(token);
 
         tokenToOperationMap.put(NumberToken.class, addToTokenList);
         tokenToOperationMap.put(VariableToken.class, addToTokenList);

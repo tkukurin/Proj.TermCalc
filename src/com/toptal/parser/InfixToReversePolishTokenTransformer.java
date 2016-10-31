@@ -6,6 +6,6 @@ import java.util.List;
 import java.util.Stack;
 
 @FunctionalInterface
-public interface InfixTransformer {
+public interface InfixToReversePolishTokenTransformer {
     void apply(Token current, List<Token> outputList, Stack<Token> operators);
 }
