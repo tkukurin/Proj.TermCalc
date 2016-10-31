@@ -13,10 +13,10 @@ import java.util.Stack;
 public class InfixToReversePolishTransformer {
 
     private final TokenizerFactory tokenizerFactory;
-    private final Map<Class<? extends Token>, InfixTransformer> tokenToOperationMap;
+    private final Map<Class<? extends Token>, InfixToReversePolishTokenTransformer> tokenToOperationMap;
 
     public InfixToReversePolishTransformer(TokenizerFactory tokenizerFactory,
-                                           Map<Class<? extends Token>, InfixTransformer> tokenToOperationMap) {
+                                           Map<Class<? extends Token>, InfixToReversePolishTokenTransformer> tokenToOperationMap) {
         this.tokenizerFactory = tokenizerFactory;
         this.tokenToOperationMap = tokenToOperationMap;
     }
@@ -30,7 +30,7 @@ public class InfixToReversePolishTransformer {
         Token token = tokenizer.next();
 
         while(!token.isEndingState()) {
-            InfixTransformer tokenHandler = tokenToOperationMap.get(token.getClass());
+            InfixToReversePolishTokenTransformer tokenHandler = tokenToOperationMap.get(token.getClass());
 
             if(tokenHandler == null) {
                 throw new QueryParseException("Unrecognized token: " + token.toString());

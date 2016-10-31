@@ -23,7 +23,7 @@ public class QueryParserTest {
         String givenInput = "1 + 2 / 3";
 
         TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
-        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        Map<Class<? extends Token>, InfixToReversePolishTokenTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
         LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
         InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
 
@@ -42,7 +42,7 @@ public class QueryParserTest {
         String givenInput = "(1.22 + 2) / ((3.1111223 - 7) * 2)";
 
         TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
-        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        Map<Class<? extends Token>, InfixToReversePolishTokenTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
         LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
         InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
 
@@ -60,7 +60,7 @@ public class QueryParserTest {
         String givenInput = "24(1 - 19)";
 
         TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
-        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        Map<Class<? extends Token>, InfixToReversePolishTokenTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
         LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
         InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
 
@@ -78,7 +78,7 @@ public class QueryParserTest {
         String givenInput = "(1+2)(22+3)";
 
         TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
-        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        Map<Class<? extends Token>, InfixToReversePolishTokenTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
         LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
         InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
 
@@ -96,7 +96,7 @@ public class QueryParserTest {
         String givenInput = "-3 + (-2)";
 
         TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
-        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        Map<Class<? extends Token>, InfixToReversePolishTokenTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
         LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
         InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
 
@@ -114,7 +114,7 @@ public class QueryParserTest {
         String givenInput = "-x + 2 = 0";
 
         TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
-        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        Map<Class<? extends Token>, InfixToReversePolishTokenTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
         LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
         InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
 
@@ -132,7 +132,7 @@ public class QueryParserTest {
         String givenInput = "-log(5)2";
 
         TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
-        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        Map<Class<? extends Token>, InfixToReversePolishTokenTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
         LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
         InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
 
@@ -150,7 +150,7 @@ public class QueryParserTest {
         String givenInput = "-(2)";
 
         TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
-        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        Map<Class<? extends Token>, InfixToReversePolishTokenTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
         LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
         InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
 
@@ -168,7 +168,7 @@ public class QueryParserTest {
         String givenInput = "2 +";
 
         TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
-        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        Map<Class<? extends Token>, InfixToReversePolishTokenTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
         LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
         InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
 

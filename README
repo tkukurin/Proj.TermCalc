@@ -35,4 +35,4 @@ output: x = 0.25
 ## Notes
 
 Currently 0x is regarded as a polynomial, so e.g. log(0x + 1) will throw an exception stating that only linear
-equations are supported by the application, it seems to be the more logical behavior. Same goes for e.g. 2x * 0x.
+equations are supported by the calculatorApplication, it seems to be the more logical behavior. Same goes for e.g. 2x * 0x.
