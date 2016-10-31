@@ -6,7 +6,7 @@ import com.toptal.parser.tokenizer.tokens.Token;
 import java.util.Stack;
 import java.util.function.Function;
 
-public class UnaryOperatorToken extends Token {
+public abstract class UnaryOperatorToken extends Token {
     private final Function<LinearPolynomialNode, LinearPolynomialNode> evaluator;
 
     public UnaryOperatorToken(String representation,

@@ -5,8 +5,8 @@ import com.toptal.parser.InfixToReversePolishTransformer;
 import com.toptal.parser.InfixTransformer;
 import com.toptal.parser.LinearEquationSolver;
 import com.toptal.parser.QueryParser;
-import com.toptal.parser.tokenizer.StringToTokenConverter;
 import com.toptal.parser.tokenizer.TokenizerFactory;
+import com.toptal.parser.tokenizer.TokenizerStateMapper;
 import com.toptal.parser.tokenizer.tokens.Token;
 import com.toptal.parser.tokenizer.tokens.state.StartToken;
 
@@ -45,9 +45,9 @@ public class ApplicationEntry {
     }
 
     private static TokenizerFactory createTokenizerFactory() {
-        List<StringToTokenConverter> stringToTokenConverters = DefaultTokenizerBundle.createTokenConverters();
+        List<TokenizerStateMapper> tokenizerStateMappers = DefaultTokenizerBundle.createTokenConverters();
         Supplier<Token> startingToken = StartToken::new;
-        return new TokenizerFactory(stringToTokenConverters, startingToken);
+        return new TokenizerFactory(tokenizerStateMappers, startingToken);
     }
 
 }

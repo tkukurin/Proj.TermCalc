@@ -2,6 +2,7 @@ package com.toptal.parser;
 
 import com.toptal.DefaultInfixTransformerBundle;
 import com.toptal.DefaultTokenizerBundle;
+import com.toptal.parser.exception.QueryParseException;
 import com.toptal.parser.result.QueryParseResult;
 import com.toptal.parser.tokenizer.TokenizerFactory;
 import com.toptal.parser.tokenizer.tokens.Token;
@@ -54,7 +55,7 @@ public class QueryParserTest {
     }
 
     @Test
-    public void shouldHandleCaseWithNoMultiplicationSign() throws Exception {
+    public void shouldHandleImplicitMultiplicationSign() throws Exception {
         // given
         String givenInput = "24(1 - 19)";
 
@@ -90,7 +91,7 @@ public class QueryParserTest {
     }
 
     @Test
-    public void shouldHandleImplicitUnaryMinus() throws Exception {
+    public void shouldHandleImplicitUnaryMinusOnNumber() throws Exception {
         // given
         String givenInput = "-3 + (-2)";
 
@@ -125,6 +126,56 @@ public class QueryParserTest {
         assertEquals(2.0, result.getSolution(), EPSILON);
     }
 
+    @Test
+    public void shouldHandleImplicitUnaryMinusOnLogarithm() throws Exception {
+        // given
+        String givenInput = "-log(5)2";
 
+        TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
+        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
+        InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
 
+        // when
+        QueryParseResult result = new QueryParser(givenLinearEquationSolver, givenInfixToReversePolishTransformer)
+                .parse(givenInput);
+
+        // then
+        assertEquals(-2 * Math.log(5), result.getSolution(), EPSILON);
+    }
+
+    @Test
+    public void shouldHandleImplicitUnaryMinusOnParentheses() throws Exception {
+        // given
+        String givenInput = "-(2)";
+
+        TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
+        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
+        InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
+
+        // when
+        QueryParseResult result = new QueryParser(givenLinearEquationSolver, givenInfixToReversePolishTransformer)
+                .parse(givenInput);
+
+        // then
+        assertEquals(-2, result.getSolution(), EPSILON);
+    }
+
+    @Test(expected = QueryParseException.class)
+    public void shouldThrowExceptionOnMissingValue() throws Exception {
+        // given
+        String givenInput = "2 +";
+
+        TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
+        Map<Class<? extends Token>, InfixTransformer> givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
+        LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
+        InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
+
+        // when
+        QueryParseResult result = new QueryParser(givenLinearEquationSolver, givenInfixToReversePolishTransformer)
+                .parse(givenInput);
+
+        // then throws exception
+    }
 }
