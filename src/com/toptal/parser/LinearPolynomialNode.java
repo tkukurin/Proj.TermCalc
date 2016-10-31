@@ -1,6 +1,6 @@
 package com.toptal.parser;
 
-import com.toptal.parser.exception.QueryParseException;
+import com.toptal.parser.exception.PolynomialOperationException;
 
 import java.util.Optional;
 
@@ -14,11 +14,11 @@ public class LinearPolynomialNode {
         this.xCoefficient = xCoefficient;
     }
 
-    public Optional<Double> getFreeValue() {
+    Optional<Double> getFreeValue() {
         return Optional.ofNullable(freeValue);
     }
 
-    public Optional<Double> getBoundValue() {
+    Optional<Double> getBoundValue() {
         return Optional.ofNullable(xCoefficient);
     }
 
@@ -48,7 +48,7 @@ public class LinearPolynomialNode {
 
     public LinearPolynomialNode mutliply(LinearPolynomialNode second) {
         if(bothHaveBoundValues(this, second)) {
-            throw new QueryParseException("Only linear equations are supported by this software");
+            throw new PolynomialOperationException("Only linear equations are supported by this software");
         }
 
         Double resultFree = null;
@@ -68,7 +68,7 @@ public class LinearPolynomialNode {
 
     public LinearPolynomialNode divide(LinearPolynomialNode second) {
         if(eitherHasBoundValues(this, second)) {
-            throw new QueryParseException("This software does not support division with linear equations");
+            throw new PolynomialOperationException("This software does not support division with linear equations");
         }
 
         double divisionResult = valueOrZero(this.getFreeValue()) / valueOrZero(second.getFreeValue());
@@ -77,11 +77,11 @@ public class LinearPolynomialNode {
 
     public LinearPolynomialNode logarithm() {
         if(this.getBoundValue().isPresent()) {
-            throw new QueryParseException("Only linear equations are supported by this software");
+            throw new PolynomialOperationException("Only linear equations are supported by this software");
         }
 
         if(!this.getFreeValue().isPresent()) {
-            throw new QueryParseException("Logarithm operation requires an argument");
+            throw new PolynomialOperationException("Logarithm operation requires an argument");
         }
 
         return new LinearPolynomialNode(Math.log(this.getFreeValue().get()), null);
@@ -102,5 +102,10 @@ public class LinearPolynomialNode {
     private double valueOrZero(Optional<Double> value) {
         return value.orElse(0.0);
     }
-    
+
+    @Override
+    public String toString() {
+        return "(" + valueOrZero(this.getBoundValue()) + "x" +
+                ") + (" + valueOrZero(this.getFreeValue()) + ")";
+    }
 }

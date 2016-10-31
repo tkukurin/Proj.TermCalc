@@ -15,9 +15,9 @@ public class NumberToken extends Token {
     @Override
     public void evaluate(Stack<LinearPolynomialNode> valueStack) {
         try {
-            valueStack.push(new LinearPolynomialNode(Double.parseDouble(getRepresentation()), null));
+            valueStack.push(new LinearPolynomialNode(Double.parseDouble(toString()), null));
         } catch(NumberFormatException e) {
-            throw new QueryParseException("Invalid double value: " + getRepresentation());
+            throw new QueryParseException("Invalid double value: " + toString());
         }
     }
 

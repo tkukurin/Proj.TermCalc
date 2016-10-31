@@ -7,8 +7,10 @@ import java.util.Stack;
 
 public class VariableToken extends Token {
 
+    public static final char REPRESENTATION = 'x';
+
     public VariableToken() {
-        super(false, "x");
+        super(false, Character.toString(REPRESENTATION));
     }
 
     @Override

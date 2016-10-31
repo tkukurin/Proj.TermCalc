@@ -22,7 +22,6 @@ public class DefaultInfixTransformerBundle {
             tokenList.addAll(popAllWithLowerPrecedence(operatorToPrecedenceMap, operatorStack, operatorToPrecedenceMap.get(token.getClass())));
             operatorStack.push(token);
         };
-
         InfixTransformer pushOntoOperatorStack = (token, tokenList, operatorsStack) -> operatorsStack.push(token);
         InfixTransformer addToTokenList = (token, tokenList, operatorStack) -> tokenList.add(token);
 
@@ -34,7 +33,7 @@ public class DefaultInfixTransformerBundle {
         tokenToOperationMap.put(SubtractionOperatorToken.class, precedenceHandler);
         tokenToOperationMap.put(DivisionOperatorToken.class, precedenceHandler);
 
-        tokenToOperationMap.put(LogarithmOperatorToken.class, pushOntoOperatorStack);
+        tokenToOperationMap.put(LogarithmFunctionToken.class, pushOntoOperatorStack);
         tokenToOperationMap.put(MinusUnaryOperatorToken.class, pushOntoOperatorStack);
         tokenToOperationMap.put(PlusUnaryOperatorToken.class, pushOntoOperatorStack);
 
@@ -81,13 +80,14 @@ public class DefaultInfixTransformerBundle {
 
     private static boolean topOfStackIsUnaryFunction(Stack<Token> operatorStack) {
         return !operatorStack.isEmpty()
-                && operatorStack.peek().getClass().getSuperclass().equals(UnaryOperatorToken.class);
+                && UnaryOperatorToken.class.isAssignableFrom(operatorStack.peek().getClass());
     }
 
     private static Map<Class<? extends Token>, Integer> createOperatorPrecedenceMap() {
         final Map<Class<? extends Token>, Integer> operatorToPrecedenceMap = new HashMap<>();
 
         operatorToPrecedenceMap.put(MinusUnaryOperatorToken.class, 3);
+        operatorToPrecedenceMap.put(PlusUnaryOperatorToken.class, 3);
         operatorToPrecedenceMap.put(DivisionOperatorToken.class, 2);
         operatorToPrecedenceMap.put(MultiplicationOperatorToken.class, 2);
         operatorToPrecedenceMap.put(AdditionOperatorToken.class, 1);

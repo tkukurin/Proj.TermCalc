@@ -1,18 +1,27 @@
 package com.toptal.parser;
 
+import com.toptal.parser.exception.EquationSolveException;
 import com.toptal.parser.result.QueryParseResult;
 import com.toptal.parser.result.QueryParseVariableResult;
 
 public class LinearEquationSolver {
 
-    QueryParseResult solve(LinearPolynomialNode lhs, LinearPolynomialNode rhs) {
-        LinearPolynomialNode x = new LinearPolynomialNode(
-                null, lhs.getBoundValue().orElse(0.0) - rhs.getBoundValue().orElse(0.0));
+    private static final double EPSILON = 10e-9;
 
-        LinearPolynomialNode free = new LinearPolynomialNode(
-                -lhs.getFreeValue().orElse(0.0) + rhs.getFreeValue().orElse(0.0), null);
+    QueryParseResult solve(LinearPolynomialNode leftHandSide,
+                           LinearPolynomialNode rightHandSide) {
+        double xCoefficient = leftHandSide.getBoundValue().orElse(0.0) - rightHandSide.getBoundValue().orElse(0.0);
+        double freeValue = -leftHandSide.getFreeValue().orElse(0.0) + rightHandSide.getFreeValue().orElse(0.0);
 
-        return new QueryParseVariableResult(free.getFreeValue().get() / x.getBoundValue().get());
+        if(doubleEquals(0, xCoefficient) && !doubleEquals(0, freeValue)) {
+            throw new EquationSolveException("Equation does not have a solution");
+        }
+
+        return new QueryParseVariableResult(freeValue / xCoefficient);
+    }
+
+    private boolean doubleEquals(double first, double second) {
+        return Math.abs(first - second) < EPSILON;
     }
 
 }

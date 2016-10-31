@@ -12,13 +12,13 @@ public class Tokenizer {
     private int position;
 
     private final String input;
-    private final List<StringToTokenConverter> stringToTokenConverters;
+    private final List<TokenizerStateMapper> tokenizerStateMappers;
 
     public Tokenizer(String input,
                      Token initialToken,
-                     List<StringToTokenConverter> stringToTokenConverters) {
+                     List<TokenizerStateMapper> tokenizerStateMappers) {
         this.input = input;
-        this.stringToTokenConverters = stringToTokenConverters;
+        this.tokenizerStateMappers = tokenizerStateMappers;
         this.currentToken = initialToken;
         this.position = 0;
     }
@@ -33,12 +33,12 @@ public class Tokenizer {
             return new EofToken();
         }
 
-        for (StringToTokenConverter stringToTokenConverter : stringToTokenConverters) {
-            if (stringToTokenConverter.accepts(currentCharacter(), this.currentToken)) {
-                int endingPosition = stringToTokenConverter.findEndingPosition(input, position);
+        for (TokenizerStateMapper tokenizerStateMapper : tokenizerStateMappers) {
+            if (tokenizerStateMapper.accepts(currentCharacter(), this.currentToken)) {
+                int endingPosition = tokenizerStateMapper.findEndingPosition(input, position);
                 String representation = input.substring(position, endingPosition);
 
-                this.currentToken = stringToTokenConverter.createToken(representation);
+                this.currentToken = tokenizerStateMapper.createToken(representation);
                 this.position = endingPosition;
 
                 return this.currentToken;

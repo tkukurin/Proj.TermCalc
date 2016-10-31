@@ -27,7 +27,7 @@ public class InfixToReversePolishTransformerTest {
         List<String> tokens = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap)
                 .parse(givenInput)
                 .stream()
-                .map(Token::getRepresentation)
+                .map(Token::toString)
                 .collect(Collectors.toList());
 
         // then
@@ -45,7 +45,7 @@ public class InfixToReversePolishTransformerTest {
         List<String> tokens = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap)
                 .parse(givenInput)
                 .stream()
-                .map(Token::getRepresentation)
+                .map(Token::toString)
                 .collect(Collectors.toList());
 
         // then
@@ -63,7 +63,7 @@ public class InfixToReversePolishTransformerTest {
         List<String> tokens = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap)
                 .parse(givenInput)
                 .stream()
-                .map(Token::getRepresentation)
+                .map(Token::toString)
                 .collect(Collectors.toList());
 
         // then
@@ -81,7 +81,7 @@ public class InfixToReversePolishTransformerTest {
         List<String> tokens = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap)
                 .parse(givenInput)
                 .stream()
-                .map(Token::getRepresentation)
+                .map(Token::toString)
                 .collect(Collectors.toList());
 
         // then
@@ -99,7 +99,7 @@ public class InfixToReversePolishTransformerTest {
         List<String> tokens = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap)
                 .parse(givenInput)
                 .stream()
-                .map(Token::getRepresentation)
+                .map(Token::toString)
                 .collect(Collectors.toList());
 
         // then
@@ -117,7 +117,7 @@ public class InfixToReversePolishTransformerTest {
         List<String> tokens = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap)
                 .parse(givenInput)
                 .stream()
-                .map(Token::getRepresentation)
+                .map(Token::toString)
                 .collect(Collectors.toList());
 
         // then

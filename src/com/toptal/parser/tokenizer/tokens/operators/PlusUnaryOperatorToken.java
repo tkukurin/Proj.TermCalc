@@ -4,8 +4,10 @@ import java.util.function.Function;
 
 public class PlusUnaryOperatorToken extends UnaryOperatorToken {
 
+    public static final char REPRESENTATION = '+';
+
     public PlusUnaryOperatorToken() {
-        super("+", Function.identity());
+        super(Character.toString(REPRESENTATION), Function.identity());
     }
 
 }

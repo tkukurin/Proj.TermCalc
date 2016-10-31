@@ -1,6 +1,6 @@
 package com.toptal.parser;
 
-import com.toptal.parser.exception.QueryParseException;
+import com.toptal.parser.exception.PolynomialOperationException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -49,7 +49,7 @@ public class LinearPolynomialNodeOperationsTest {
         assertEquals(Double.valueOf(4.0), result.getBoundValue().get());
     }
 
-    @Test(expected = QueryParseException.class)
+    @Test(expected = PolynomialOperationException.class)
     public void shouldThrowExceptionIfEquationIsNonLinear() throws Exception {
         // given
         LinearPolynomialNode first = new LinearPolynomialNode(2.0, 3.0);
@@ -74,7 +74,7 @@ public class LinearPolynomialNodeOperationsTest {
         assertEquals(Double.valueOf(2.0 / 5.0), result.getFreeValue().get());
     }
 
-    @Test(expected = QueryParseException.class)
+    @Test(expected = PolynomialOperationException.class)
     public void shouldThrowExceptionOnBoundVariableDivision() throws Exception {
         // given
         LinearPolynomialNode first = new LinearPolynomialNode(2.0, null);
@@ -98,7 +98,7 @@ public class LinearPolynomialNodeOperationsTest {
         assertEquals(Double.valueOf(Math.log(2.0)), result.getFreeValue().get());
     }
 
-    @Test(expected = QueryParseException.class)
+    @Test(expected = PolynomialOperationException.class)
     public void shouldThrowExceptionIfTakingLogarithmOfBoundVariable() throws Exception {
         // given
         LinearPolynomialNode node = new LinearPolynomialNode(2.0, 1.0);

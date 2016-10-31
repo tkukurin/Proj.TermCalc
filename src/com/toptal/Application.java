@@ -2,18 +2,20 @@ package com.toptal;
 
 import com.toptal.environment.CalculatorEnvironment;
 import com.toptal.parser.QueryParser;
+import com.toptal.parser.exception.EquationSolveException;
+import com.toptal.parser.exception.PolynomialOperationException;
 import com.toptal.parser.exception.QueryParseException;
 
 import java.io.IOException;
 import java.util.Objects;
 
-public class Application {
+class Application {
 
     private final CalculatorEnvironment environment;
     private final QueryParser parser;
     private final String applicationExitString;
 
-    public Application(CalculatorEnvironment environment,
+    Application(CalculatorEnvironment environment,
                        QueryParser parser,
                        String applicationExitString) {
         this.environment = environment;
@@ -21,7 +23,7 @@ public class Application {
         this.applicationExitString = applicationExitString;
     }
 
-    public void run() throws IOException {
+    void run() throws IOException {
         while (true) {
             String input = environment.requestUserInput();
 
@@ -41,10 +43,14 @@ public class Application {
     private String getResult(String input) {
         try {
             return parser.parse(input).toString();
-        } catch(QueryParseException e) {
+        } catch (QueryParseException e) {
             return "Malformed query: " + e.getLocalizedMessage();
+        } catch (PolynomialOperationException e) {
+            return "Error applying operation: " + e.getLocalizedMessage();
+        } catch (EquationSolveException e) {
+            return "Error solving linear equation: " + e.getLocalizedMessage();
         } catch(Exception e) {
-            return "Error evaluating: " + e.getMessage();
+            return "Runtime error: " + e.getMessage();
         }
     }
 
