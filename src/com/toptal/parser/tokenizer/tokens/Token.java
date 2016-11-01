@@ -1,7 +1,7 @@
 package com.toptal.parser.tokenizer.tokens;
 
 import com.toptal.parser.LinearPolynomialNode;
-import com.toptal.parser.exception.QueryParseException;
+import com.toptal.parser.exceptions.QueryParseException;
 
 import java.util.Stack;
 

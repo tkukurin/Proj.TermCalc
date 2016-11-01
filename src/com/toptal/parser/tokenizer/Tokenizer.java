@@ -1,10 +1,12 @@
 package com.toptal.parser.tokenizer;
 
-import com.toptal.parser.exception.QueryParseException;
+import com.toptal.parser.exceptions.QueryParseException;
 import com.toptal.parser.tokenizer.tokens.Token;
 import com.toptal.parser.tokenizer.tokens.state.EofToken;
 
 import java.util.List;
+
+import static java.lang.Character.isWhitespace;
 
 public class Tokenizer {
 
@@ -14,9 +16,9 @@ public class Tokenizer {
     private final String input;
     private final List<TokenizerStateMapper> tokenizerStateMappers;
 
-    public Tokenizer(String input,
-                     Token initialToken,
-                     List<TokenizerStateMapper> tokenizerStateMappers) {
+    Tokenizer(String input,
+              Token initialToken,
+              List<TokenizerStateMapper> tokenizerStateMappers) {
         this.input = input;
         this.tokenizerStateMappers = tokenizerStateMappers;
         this.currentToken = initialToken;
@@ -25,11 +27,11 @@ public class Tokenizer {
 
     public Token next() {
 
-        while (position < input.length() && Character.isWhitespace(currentCharacter())) {
+        while (!isPastEndOfInput(position) && isWhitespace(currentCharacter())) {
             position++;
         }
 
-        if (position == input.length()) {
+        if (isPastEndOfInput(position)) {
             return new EofToken();
         }
 
@@ -46,6 +48,10 @@ public class Tokenizer {
         }
 
         throw new QueryParseException("Unexpected character encountered: " + currentCharacter());
+    }
+
+    private boolean isPastEndOfInput(int position) {
+        return position >= input.length();
     }
 
     private char currentCharacter() {

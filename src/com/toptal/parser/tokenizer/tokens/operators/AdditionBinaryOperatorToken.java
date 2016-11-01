@@ -2,11 +2,11 @@ package com.toptal.parser.tokenizer.tokens.operators;
 
 import com.toptal.parser.LinearPolynomialNode;
 
-public class AdditionOperatorToken extends BinaryOperatorToken {
+public class AdditionBinaryOperatorToken extends BinaryOperatorToken {
 
     public static final char REPRESENTATION = '+';
 
-    public AdditionOperatorToken() {
+    public AdditionBinaryOperatorToken() {
         super(Character.toString(REPRESENTATION), LinearPolynomialNode::add);
     }
 }

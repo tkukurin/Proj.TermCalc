@@ -1,6 +1,6 @@
 package com.toptal;
 
-import com.toptal.parser.exception.QueryParseException;
+import com.toptal.parser.exceptions.QueryParseException;
 import com.toptal.parser.tokenizer.TokenizerStateMapper;
 import com.toptal.parser.tokenizer.tokens.Token;
 import com.toptal.parser.tokenizer.tokens.operators.*;
@@ -35,19 +35,19 @@ public class DefaultTokenizerBundle {
 
     private static TokenizerStateMapper unaryPlusParser() {
         return new TokenizerStateMapper(
-                (currentCharacter, currentToken) -> currentCharacter == PlusUnaryOperatorToken.REPRESENTATION && cannotPrecedeBinaryOperand(currentToken),
+                (currentCharacter, currentToken) -> currentCharacter == PlusUnaryOperatorToken.REPRESENTATION && precedesUnaryOperator(currentToken),
                 (input, position) -> position + 1,
                 (stringRepresentation) -> new PlusUnaryOperatorToken());
     }
 
     private static TokenizerStateMapper unaryMinusParser() {
         return new TokenizerStateMapper(
-                (currentCharacter, currentToken) -> currentCharacter == MinusUnaryOperatorToken.REPRESENTATION && cannotPrecedeBinaryOperand(currentToken),
+                (currentCharacter, currentToken) -> currentCharacter == MinusUnaryOperatorToken.REPRESENTATION && precedesUnaryOperator(currentToken),
                 (input, position) -> position + 1,
                 (stringRepresentation) -> new MinusUnaryOperatorToken());
     }
 
-    private static boolean cannotPrecedeBinaryOperand(Token currentToken) {
+    private static boolean precedesUnaryOperator(Token currentToken) {
         Class<?> currentTokenType = currentToken.getClass();
         return currentTokenType == OpenParenthesisToken.class
                 || currentTokenType == StartToken.class
@@ -68,27 +68,27 @@ public class DefaultTokenizerBundle {
     }
 
     private static boolean isFunctionToken(Token currentToken) {
-        return currentToken.getClass().getSuperclass().equals(FunctionToken.class);
+        return currentToken instanceof FunctionToken;
     }
 
     private static TokenizerStateMapper implicitMultiplicationParser() {
         return new TokenizerStateMapper(
                 DefaultTokenizerBundle::isImplicitMultiplicationSign,
                 (input, position) -> position,
-                (stringRepresentation) -> new MultiplicationOperatorToken());
+                (stringRepresentation) -> new MultiplicationBinaryOperatorToken());
     }
 
-    private static boolean isImplicitMultiplicationSign(char current, Token currentToken) {
-        boolean lastTokenCanBeMultiplied = currentToken.getClass() == NumberToken.class ||
-                currentToken.getClass() == CloseParenthesisToken.class ||
-                currentToken.getClass() == VariableToken.class;
+    private static boolean isImplicitMultiplicationSign(char currentCharacter, Token currentToken) {
+        boolean lastTokenCanBeMultiplied = currentToken instanceof NumberToken ||
+                currentToken instanceof CloseParenthesisToken ||
+                currentToken instanceof VariableToken;
 
         final char startOfLogarithm = LogarithmFunctionToken.REPRESENTATION.charAt(0);
-        return (current == startOfLogarithm
-                || current == OpenParenthesisToken.REPRESENTATION
-                || current == VariableToken.REPRESENTATION)
+        return (currentCharacter == startOfLogarithm
+                || currentCharacter == OpenParenthesisToken.REPRESENTATION
+                || currentCharacter == VariableToken.REPRESENTATION)
                     && lastTokenCanBeMultiplied
-                || (Character.isDigit(current) && currentToken.getClass() == CloseParenthesisToken.class);
+                || (Character.isDigit(currentCharacter) && currentToken instanceof CloseParenthesisToken);
     }
 
     private static TokenizerStateMapper doubleValueParser() {
@@ -140,10 +140,10 @@ public class DefaultTokenizerBundle {
 
         final Map<Character, Supplier<Token>> singleCharacterToSupplier = new HashMap<>();
 
-        singleCharacterToSupplier.put(AdditionOperatorToken.REPRESENTATION, AdditionOperatorToken::new);
-        singleCharacterToSupplier.put(SubtractionOperatorToken.REPRESENTATION, SubtractionOperatorToken::new);
-        singleCharacterToSupplier.put(MultiplicationOperatorToken.REPRESENTATION, MultiplicationOperatorToken::new);
-        singleCharacterToSupplier.put(DivisionOperatorToken.REPRESENTATION, DivisionOperatorToken::new);
+        singleCharacterToSupplier.put(AdditionBinaryOperatorToken.REPRESENTATION, AdditionBinaryOperatorToken::new);
+        singleCharacterToSupplier.put(SubtractionBinaryOperatorToken.REPRESENTATION, SubtractionBinaryOperatorToken::new);
+        singleCharacterToSupplier.put(MultiplicationBinaryOperatorToken.REPRESENTATION, MultiplicationBinaryOperatorToken::new);
+        singleCharacterToSupplier.put(DivisionBinaryOperatorToken.REPRESENTATION, DivisionBinaryOperatorToken::new);
         singleCharacterToSupplier.put(OpenParenthesisToken.REPRESENTATION, OpenParenthesisToken::new);
         singleCharacterToSupplier.put(CloseParenthesisToken.REPRESENTATION, CloseParenthesisToken::new);
         singleCharacterToSupplier.put(VariableToken.REPRESENTATION, VariableToken::new);

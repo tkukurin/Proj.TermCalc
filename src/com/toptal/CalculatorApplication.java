@@ -2,9 +2,9 @@ package com.toptal;
 
 import com.toptal.environment.CalculatorEnvironment;
 import com.toptal.parser.QueryParser;
-import com.toptal.parser.exception.EquationSolveException;
-import com.toptal.parser.exception.PolynomialOperationException;
-import com.toptal.parser.exception.QueryParseException;
+import com.toptal.parser.exceptions.EquationSolveException;
+import com.toptal.parser.exceptions.PolynomialOperationException;
+import com.toptal.parser.exceptions.QueryParseException;
 
 import java.io.IOException;
 import java.util.Objects;

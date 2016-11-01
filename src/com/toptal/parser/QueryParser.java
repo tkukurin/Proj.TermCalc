@@ -1,8 +1,9 @@
 package com.toptal.parser;
 
-import com.toptal.parser.exception.QueryParseException;
+import com.toptal.parser.exceptions.QueryParseException;
 import com.toptal.parser.result.QueryParseNumericResult;
 import com.toptal.parser.result.QueryParseResult;
+import com.toptal.parser.transformer.InfixToReversePolishTransformer;
 
 import java.util.Arrays;
 import java.util.EmptyStackException;
@@ -11,6 +12,7 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 public class QueryParser {
+
     private static final String EQUALITY_SIGN = "=";
     private static final String SPACE = " ";
     private static final String EMPTY_STRING = "";
@@ -40,28 +42,28 @@ public class QueryParser {
                 : equationSolver.solve(solutions.get(0), solutions.get(1));
     }
 
+    private LinearPolynomialNode parseSingleQuery(String query) {
+        Stack<LinearPolynomialNode> nodeStack = new Stack<>();
+
+        try {
+            infixToReversePolishTransformer.tokenizeToReversePolish(query).forEach(token -> token.evaluate(nodeStack));
+        } catch(EmptyStackException e) {
+            throw new QueryParseException("Missing operands in input string");
+        }
+
+        if (nodeStack.size() != 1) {
+            throw new QueryParseException("Syntax error in input string");
+        }
+
+        return nodeStack.pop();
+    }
+
     private QueryParseResult getSimpleSolution(LinearPolynomialNode linearPolynomialNode) {
         if (linearPolynomialNode.getBoundValue().isPresent()) {
             throw new QueryParseException("Linear equation should contain a right hand side");
         }
 
         return new QueryParseNumericResult(linearPolynomialNode.getFreeValue().get());
-    }
-
-    private LinearPolynomialNode parseSingleQuery(String query) {
-        Stack<LinearPolynomialNode> nodes = new Stack<>();
-
-        try {
-            infixToReversePolishTransformer.parse(query).forEach(token -> token.evaluate(nodes));
-        } catch(EmptyStackException e) {
-            throw new QueryParseException("Missing operands in input string");
-        }
-
-        if (nodes.size() != 1) {
-            throw new QueryParseException("Syntax error in input string");
-        }
-
-        return nodes.pop();
     }
 
 }
