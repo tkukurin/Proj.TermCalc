@@ -1,6 +1,6 @@
 package com.toptal.parser;
 
-import com.toptal.parser.exception.PolynomialOperationException;
+import com.toptal.parser.exceptions.PolynomialOperationException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -58,7 +58,7 @@ public class LinearPolynomialNodeOperationsTest {
         // when
         first.mutliply(second);
 
-        // then throws exception
+        // then throws exceptions
     }
 
     @Test
@@ -83,7 +83,7 @@ public class LinearPolynomialNodeOperationsTest {
         // when
         first.divide(second);
 
-        // then throws exception
+        // then throws exceptions
     }
 
     @Test
@@ -106,6 +106,6 @@ public class LinearPolynomialNodeOperationsTest {
         // when
         node.logarithm();
 
-        // then throws exception
+        // then throws exceptions
     }
 }

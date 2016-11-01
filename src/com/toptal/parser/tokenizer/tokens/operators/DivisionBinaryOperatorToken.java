@@ -2,11 +2,11 @@ package com.toptal.parser.tokenizer.tokens.operators;
 
 import com.toptal.parser.LinearPolynomialNode;
 
-public class DivisionOperatorToken extends BinaryOperatorToken {
+public class DivisionBinaryOperatorToken extends BinaryOperatorToken {
 
     public static final char REPRESENTATION = '/';
 
-    public DivisionOperatorToken() {
+    public DivisionBinaryOperatorToken() {
         super(Character.toString(REPRESENTATION), LinearPolynomialNode::divide);
     }
 }

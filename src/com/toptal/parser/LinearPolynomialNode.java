@@ -1,12 +1,13 @@
 package com.toptal.parser;
 
-import com.toptal.parser.exception.PolynomialOperationException;
+import com.toptal.parser.exceptions.PolynomialOperationException;
 
 import java.util.Optional;
 
 public class LinearPolynomialNode {
-    private Double freeValue;
-    private Double xCoefficient;
+
+    private final Double freeValue;
+    private final Double xCoefficient;
 
     public LinearPolynomialNode(Double freeValue,
                                 Double xCoefficient) {

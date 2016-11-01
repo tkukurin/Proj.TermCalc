@@ -1,6 +1,6 @@
 package com.toptal.parser;
 
-import com.toptal.parser.exception.EquationSolveException;
+import com.toptal.parser.exceptions.EquationSolveException;
 import com.toptal.parser.result.QueryParseResult;
 import com.toptal.parser.result.QueryParseVariableResult;
 

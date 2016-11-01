@@ -1,27 +1,26 @@
-package com.toptal.parser;
+package com.toptal.parser.transformer;
 
-import com.toptal.parser.exception.QueryParseException;
+import com.toptal.parser.exceptions.QueryParseException;
 import com.toptal.parser.tokenizer.Tokenizer;
 import com.toptal.parser.tokenizer.TokenizerFactory;
 import com.toptal.parser.tokenizer.tokens.Token;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 
 public class InfixToReversePolishTransformer {
 
     private final TokenizerFactory tokenizerFactory;
-    private final Map<Class<? extends Token>, InfixToReversePolishTokenTransformer> tokenToOperationMap;
+    private final InfixToReversePolishTokenTransformMap tokenToOperationMap;
 
     public InfixToReversePolishTransformer(TokenizerFactory tokenizerFactory,
-                                           Map<Class<? extends Token>, InfixToReversePolishTokenTransformer> tokenToOperationMap) {
+                                           InfixToReversePolishTokenTransformMap tokenToOperationMap) {
         this.tokenizerFactory = tokenizerFactory;
         this.tokenToOperationMap = tokenToOperationMap;
     }
 
-    List<Token> parse(String query) {
+    public List<Token> tokenizeToReversePolish(String query) {
         Tokenizer tokenizer = tokenizerFactory.createTokenizer(query);
 
         List<Token> tokens = new LinkedList<>();
