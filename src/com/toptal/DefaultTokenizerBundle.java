@@ -51,7 +51,8 @@ public class DefaultTokenizerBundle {
         Class<?> currentTokenType = currentToken.getClass();
         return currentTokenType == OpenParenthesisToken.class
                 || currentTokenType == StartToken.class
-                || currentTokenType.getSuperclass() == BinaryOperatorToken.class;
+                || currentToken instanceof BinaryOperatorToken
+                || currentToken instanceof UnaryOperatorToken;
     }
 
     private static TokenizerStateMapper functionMustBeFollowedByParenthesisParser() {
@@ -59,12 +60,16 @@ public class DefaultTokenizerBundle {
                 (currentCharacter, currentToken) -> isFunctionToken(currentToken),
                 (input, position) -> position + 1,
                 (stringRepresentation) -> {
-                    if(!stringRepresentation.equals(Character.toString(OpenParenthesisToken.REPRESENTATION))) {
+                    if(!isOpenParenthesis(stringRepresentation)) {
                         throw new QueryParseException("Expecting function parameters to be parenthesised");
                     }
 
                     return new OpenParenthesisToken();
                 });
+    }
+
+    private static boolean isOpenParenthesis(String stringRepresentation) {
+        return stringRepresentation.equals(Character.toString(OpenParenthesisToken.REPRESENTATION));
     }
 
     private static boolean isFunctionToken(Token currentToken) {
@@ -118,16 +123,13 @@ public class DefaultTokenizerBundle {
         return new TokenizerStateMapper(
                 (currentCharacter, currentToken) -> currentCharacter == LogarithmFunctionToken.REPRESENTATION.charAt(0),
                 (input, position) -> {
-                    requireLogarithmString(input, position);
+                    if(!isLogarithmString(input, position)) {
+                        throw new QueryParseException("Found 'l' character; did you mean: 'log'?");
+                    }
+
                     return position + LogarithmFunctionToken.REPRESENTATION.length();
                 },
                 (stringRepresentation) -> new LogarithmFunctionToken());
-    }
-
-    private static void requireLogarithmString(String input, Integer position) {
-        if(!isLogarithmString(input, position)) {
-            throw new QueryParseException("Found 'l' character; did you mean: 'log'?");
-        }
     }
 
     private static boolean isLogarithmString(String input, int position) {

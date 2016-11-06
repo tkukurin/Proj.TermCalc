@@ -7,6 +7,7 @@ import java.util.Stack;
 import java.util.function.BiFunction;
 
 public abstract class BinaryOperatorToken extends Token {
+
     private final BiFunction<LinearPolynomialNode, LinearPolynomialNode, LinearPolynomialNode> evaluator;
 
     public BinaryOperatorToken(String representation,
