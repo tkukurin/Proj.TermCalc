@@ -21,7 +21,6 @@ public class CalculatorEnvironment {
 
     public String requestUserInput() throws IOException {
         this.output(this.inputPointer);
-        this.output(" ");
         return inputStreamScanner.nextLine();
     }
 

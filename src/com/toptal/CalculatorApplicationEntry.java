@@ -1,7 +1,7 @@
 package com.toptal;
 
 import com.toptal.environment.CalculatorEnvironment;
-import com.toptal.parser.LinearEquationSolver;
+import com.toptal.parser.LinearPolynomialNodeValueTransformer;
 import com.toptal.parser.QueryParser;
 import com.toptal.parser.tokenizer.TokenizerFactory;
 import com.toptal.parser.tokenizer.TokenizerStateMapper;
@@ -28,7 +28,7 @@ public class CalculatorApplicationEntry {
     }
 
     private static CalculatorEnvironment createApplicationEnvironment() {
-        final String inputPointer = ">";
+        final String inputPointer = "> ";
         final Scanner userInputScanner = new Scanner(System.in);
         final OutputStreamWriter outputWriter = new OutputStreamWriter(System.out);
 
@@ -38,9 +38,9 @@ public class CalculatorApplicationEntry {
     private static QueryParser createQueryParser() {
         final TokenizerFactory tokenizerFactory = createTokenizerFactory();
         final InfixToReversePolishTransformer infixToReversePolishTransformer = createInfixToReversePolishTransformer(tokenizerFactory);
-        final LinearEquationSolver linearEquationSolver = new LinearEquationSolver();
+        final LinearPolynomialNodeValueTransformer linearPolynomialNodeValueTransformer = new LinearPolynomialNodeValueTransformer();
 
-        return new QueryParser(linearEquationSolver, infixToReversePolishTransformer);
+        return new QueryParser(linearPolynomialNodeValueTransformer, infixToReversePolishTransformer);
     }
 
     private static TokenizerFactory createTokenizerFactory() {

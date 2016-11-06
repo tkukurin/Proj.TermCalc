@@ -23,11 +23,11 @@ public class QueryParserTest {
 
         TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
         InfixToReversePolishTokenTransformMap givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
-        LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
+        LinearPolynomialNodeValueTransformer givenLinearPolynomialNodeValueTransformer = new LinearPolynomialNodeValueTransformer();
         InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
 
         // when
-        QueryParseResult result = new QueryParser(givenLinearEquationSolver, givenInfixToReversePolishTransformer)
+        QueryParseResult result = new QueryParser(givenLinearPolynomialNodeValueTransformer, givenInfixToReversePolishTransformer)
                 .parse(givenInput);
 
         // then
@@ -42,11 +42,11 @@ public class QueryParserTest {
 
         TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
         InfixToReversePolishTokenTransformMap givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
-        LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
+        LinearPolynomialNodeValueTransformer givenLinearPolynomialNodeValueTransformer = new LinearPolynomialNodeValueTransformer();
         InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
 
         // when
-        QueryParseResult result = new QueryParser(givenLinearEquationSolver, givenInfixToReversePolishTransformer)
+        QueryParseResult result = new QueryParser(givenLinearPolynomialNodeValueTransformer, givenInfixToReversePolishTransformer)
                 .parse(givenInput);
 
         // then
@@ -60,11 +60,11 @@ public class QueryParserTest {
 
         TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
         InfixToReversePolishTokenTransformMap givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
-        LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
+        LinearPolynomialNodeValueTransformer givenLinearPolynomialNodeValueTransformer = new LinearPolynomialNodeValueTransformer();
         InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
 
         // when
-        QueryParseResult result = new QueryParser(givenLinearEquationSolver, givenInfixToReversePolishTransformer)
+        QueryParseResult result = new QueryParser(givenLinearPolynomialNodeValueTransformer, givenInfixToReversePolishTransformer)
                 .parse(givenInput);
 
         // then
@@ -78,11 +78,11 @@ public class QueryParserTest {
 
         TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
         InfixToReversePolishTokenTransformMap givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
-        LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
+        LinearPolynomialNodeValueTransformer givenLinearPolynomialNodeValueTransformer = new LinearPolynomialNodeValueTransformer();
         InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
 
         // when
-        QueryParseResult result = new QueryParser(givenLinearEquationSolver, givenInfixToReversePolishTransformer)
+        QueryParseResult result = new QueryParser(givenLinearPolynomialNodeValueTransformer, givenInfixToReversePolishTransformer)
                 .parse(givenInput);
 
         // then
@@ -96,11 +96,11 @@ public class QueryParserTest {
 
         TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
         InfixToReversePolishTokenTransformMap givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
-        LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
+        LinearPolynomialNodeValueTransformer givenLinearPolynomialNodeValueTransformer = new LinearPolynomialNodeValueTransformer();
         InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
 
         // when
-        QueryParseResult result = new QueryParser(givenLinearEquationSolver, givenInfixToReversePolishTransformer)
+        QueryParseResult result = new QueryParser(givenLinearPolynomialNodeValueTransformer, givenInfixToReversePolishTransformer)
                 .parse(givenInput);
 
         // then
@@ -114,11 +114,11 @@ public class QueryParserTest {
 
         TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
         InfixToReversePolishTokenTransformMap givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
-        LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
+        LinearPolynomialNodeValueTransformer givenLinearPolynomialNodeValueTransformer = new LinearPolynomialNodeValueTransformer();
         InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
 
         // when
-        QueryParseResult result = new QueryParser(givenLinearEquationSolver, givenInfixToReversePolishTransformer)
+        QueryParseResult result = new QueryParser(givenLinearPolynomialNodeValueTransformer, givenInfixToReversePolishTransformer)
                 .parse(givenInput);
 
         // then
@@ -132,11 +132,11 @@ public class QueryParserTest {
 
         TokenizerFactory givenTokenizerFactory = new TokenizerFactory(DefaultTokenizerBundle.createTokenConverters(), StartToken::new);
         InfixToReversePolishTokenTransformMap givenParseMap = DefaultInfixTransformerBundle.createTokenParsingMap();
-        LinearEquationSolver givenLinearEquationSolver = new LinearEquationSolver();
+        LinearPolynomialNodeValueTransformer givenLinearPolynomialNodeValueTransformer = new LinearPolynomialNodeValueTransformer();
         InfixToReversePolishTransformer givenInfixToReversePolishTransformer = new InfixToReversePolishTransformer(givenTokenizerFactory, givenParseMap);
 
         // when
-        new QueryParser(givenLinearEquationSolver, givenInfixToReversePolishTransformer).parse(givenInput);
+        new QueryParser(givenLinearPolynomialNodeValueTransformer, givenInfixToReversePolishTransformer).parse(givenInput);
 
         // then throws exceptions
     }

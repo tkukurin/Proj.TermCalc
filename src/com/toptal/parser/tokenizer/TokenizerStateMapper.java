@@ -20,16 +20,16 @@ public class TokenizerStateMapper {
         this.newTokenCreator = newTokenCreator;
     }
 
-    boolean accepts(char c, Token token) {
-        return currentCharacterAndTokenPredicate.test(c, token);
+    boolean accepts(char currentCharacter, Token lastReadToken) {
+        return currentCharacterAndTokenPredicate.test(currentCharacter, lastReadToken);
     }
 
     int findEndingPosition(String input, int position) {
         return endingPositionFinder.apply(input, position);
     }
 
-    Token createToken(String s) {
-        return newTokenCreator.apply(s);
+    Token createToken(String tokenRepresentationString) {
+        return newTokenCreator.apply(tokenRepresentationString);
     }
 
 }

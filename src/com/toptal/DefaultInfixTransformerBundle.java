@@ -44,7 +44,7 @@ public class DefaultInfixTransformerBundle {
         final Map<Class<? extends Token>, Integer> operatorToPrecedenceMap = createOperatorPrecedenceMap();
         return (token, tokenList, operatorStack) -> {
             int currentTokenPrecedence = operatorToPrecedenceMap.get(token.getClass());
-            tokenList.addAll(popAllWithLowerPrecedence(operatorToPrecedenceMap, operatorStack, currentTokenPrecedence));
+            tokenList.addAll(popAllWithHigherPrecedence(operatorToPrecedenceMap, operatorStack, currentTokenPrecedence));
             operatorStack.push(token);
         };
     }
@@ -62,18 +62,18 @@ public class DefaultInfixTransformerBundle {
         return operatorToPrecedenceMap;
     }
 
-    private static List<Token> popAllWithLowerPrecedence(Map<Class<? extends Token>, Integer> operatorToPrecedenceMap,
-                                                         Stack<Token> operators,
-                                                         int precedence) {
-        List<Token> tokens = new LinkedList<>();
+    private static List<Token> popAllWithHigherPrecedence(Map<Class<? extends Token>, Integer> operatorToPrecedenceMap,
+                                                          Stack<Token> operators,
+                                                          int currentOperatorPrecedence) {
+        List<Token> tokensFromTop = new LinkedList<>();
 
         while (!operators.isEmpty()
                 && operatorToPrecedenceMap.containsKey(operators.peek().getClass())
-                && precedence <= operatorToPrecedenceMap.get(operators.peek().getClass())) {
-            tokens.add(operators.pop());
+                && currentOperatorPrecedence <= operatorToPrecedenceMap.get(operators.peek().getClass())) {
+            tokensFromTop.add(operators.pop());
         }
 
-        return tokens;
+        return tokensFromTop;
     }
 
     private static InfixToReversePolishTokenTransformer createCloseParenthesisHandler() {
